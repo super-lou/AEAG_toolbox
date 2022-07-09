@@ -200,11 +200,11 @@ axis_xlim =
 #          'map' : map about trend analyses
 to_plot_station =
     c(
-        'datasheet'
+        # 'datasheet'
         # 'table'
         # 'map'
         # 'map_regime'
-        # 'map_trend'
+        'map_trend'
         # 'map_mean'
     )
 
@@ -217,18 +217,18 @@ logo_to_show =
     )
 
 zone_to_show =
-    'France'
-    # 'Adour-Garonne'
+    # 'France'
+    'Adour-Garonne'
 
 pdf_chunk =
-    'by_code'
-    # 'all'
+    # 'by_code'
+    'all'
     
 show_colorEvent = TRUE
 
 
 ## 5. IMPORT _________________________________________________________
-dev_path = file.path(computer_work_path, 'R', 'ash', 'R')
+dev_path = file.path(dirname(computer_work_path), 'ash', 'R')
 if (file.exists(dev_path)) {
     print('Loading ash from local directory')
     list_path = list.files(dev_path, pattern="*.R$", full.names=TRUE)
