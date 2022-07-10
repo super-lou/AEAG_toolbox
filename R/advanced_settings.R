@@ -200,6 +200,7 @@ axis_xlim =
 #          'map' : map about trend analyses
 to_plot_station =
     c(
+        # 'summary'
         # 'datasheet'
         # 'table'
         # 'map'
