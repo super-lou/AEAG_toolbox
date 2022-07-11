@@ -6,7 +6,7 @@ event = "Moyennes Eaux"
 hydroPeriod = c("09-01", "08-31")
 
 yearNA_lim = 10
-NA_pct_lim = 1
+dayNA_lim = 3
 day_to_roll = NULL
 
 functM = NULL

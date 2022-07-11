@@ -6,7 +6,7 @@ event = "Étiage"
 hydroPeriod = c('05-01', '11-30')
 
 yearNA_lim = 10
-NA_pct_lim = 1
+dayNA_lim = 3
 day_to_roll = 10
 
 functM = NULL

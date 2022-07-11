@@ -227,6 +227,8 @@ pdf_chunk =
     
 show_colorEvent = TRUE
 
+exQprob = 0.01
+
 
 ## 5. IMPORT _________________________________________________________
 dev_path = file.path(dirname(computer_work_path), 'ash', 'R')

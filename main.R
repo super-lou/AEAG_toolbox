@@ -80,7 +80,9 @@ filename =
     # ""
     "all"
     # c(
-        # "P0364010_HYDRO_QJM.txt",
+        # "Q0214010_HYDRO_QJM.txt",
+        # "O5464310_HYDRO_QJM.txt",
+        # "O3314010_HYDRO_QJM.txt"
         # "S2235610_HYDRO_QJM.txt"
         # "O1484320_HYDRO_QJM.txt",
         # "Q7002910_HYDRO_QJM.txt",
@@ -105,7 +107,7 @@ filename =
 to_do =
     c(
         # 'station_extraction',
-        'station_trend_analyse',
+        # 'station_trend_analyse',
         'station_trend_plot'
     )
 
@@ -115,7 +117,7 @@ to_do =
 # data hence the start in 1800
 # - periodSub tends to represent the period with the most accessible
 # flow data
-periodAll = c("1968-01-01", "2020-12-31")
+periodAll = c("1900-01-01", "2020-12-31")
 periodSub =
     NULL
     # c("1968-01-01", "2020-12-31")
