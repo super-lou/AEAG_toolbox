@@ -186,7 +186,6 @@ if ('station_trend_analyse' %in% to_do) {
                                  df_data_missing, df_meta_missing,
                                  period=trend_period,
                                  hydroPeriod=hydroPeriod,
-                                 alpha=alpha,
                                  df_flag=df_flag,
                                  yearNA_lim=yearNA_lim,
                                  dayNA_lim=dayNA_lim,
