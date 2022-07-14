@@ -201,11 +201,11 @@ axis_xlim =
 to_plot_station =
     c(
         # 'summary'
-        # 'datasheet'
+        'datasheet'
         # 'table'
         # 'map'
         # 'map_regime'
-        'map_trend'
+        # 'map_trend'
         # 'map_mean'
     )
 
@@ -258,13 +258,12 @@ library(png)
 library(ggrepel)
 library(latex2exp)
 library(StatsAnalysisTrend)
-library(lubridate)
-library(trend)
-library(Hmisc)
-library(accelerometry)
-library(CircStats)
-library(tools)
+# library(lubridate)
+# library(trend)
+# library(Hmisc)
+# library(accelerometry)
+# library(CircStats)
+# library(tools)
 library(officer)
-library(sp)
+# library(sp)
 library(sf)
-library(Hmisc)
