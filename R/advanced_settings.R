@@ -231,16 +231,16 @@ exQprob = 0.01
 
 
 ## 5. IMPORT _________________________________________________________
-dev_path = file.path(dirname(computer_work_path), 'ash', 'R')
+dev_path = file.path(dirname(computer_work_path), 'ashes', 'R')
 if (file.exists(dev_path)) {
-    print('Loading ash from local directory')
+    print('Loading ashes from local directory')
     list_path = list.files(dev_path, pattern="*.R$", full.names=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
 
 } else {
-    library(ash)
+    library(ashes)
 }
 
 library(dplyr)
