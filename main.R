@@ -8,7 +8,7 @@
 # *2   INRAE, France
 #      eric.sauquet@inrae.fr
 #
-# This file is part of ash R toolbox.
+# This file is part of ashes R toolbox.
 #
 # Ash R toolbox is free software: you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
