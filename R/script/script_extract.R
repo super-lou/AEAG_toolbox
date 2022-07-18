@@ -96,6 +96,9 @@ if ('station_extraction' %in% to_do) {
                              list_from=list('docx', 'txt', 'manual'))
     df_data = df_join$data
     df_meta = df_join$meta
+    
+    df_data = df_data[order(df_data$code),]
+    df_meta = df_meta[order(df_meta$code),]
 
     # Get all different stations code
     Code = levels(factor(df_meta$code))
