@@ -62,8 +62,8 @@
 ## 1. WORKING DIRECTORY ______________________________________________
 # Work path (it normally needs to end with '\\ash' directory)
 computer_work_path = 
-    "/home/louis/Documents/bouleau/INRAE/CDD_stationnarite/ash_toolbox"
-    # "C:\\Users\\louis.heraut\\Documents\\CDD_stationnarite\\ash"
+    "/home/louis/Documents/bouleau/INRAE/CDD_stationnarite/ashes_toolbox"
+    # "C:\\Users\\louis.heraut\\Documents\\CDD_stationnarite\\ashes"
 
 ## 2. DATA DIRECTORY _________________________________________________
 # Directory of Banque HYDRO data you want to use in ash\\data\\ to
