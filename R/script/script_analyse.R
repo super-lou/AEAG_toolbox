@@ -74,10 +74,11 @@ if ('station_trend_analyse' %in% to_do) {
         for (iHY in 1:nHydroPeriod) {
 
             source(file.path('R', var_dir, init_var_file),
-                             encoding='UTF-8')
+                   encoding='UTF-8')
+            source(file.path('R', var_dir, init_tools_file),
+                   encoding='UTF-8')
             source(file.path(script_to_analyse_dirpath, script),
                    encoding='UTF-8')
-
             split_script = split_path(script)
             
             if (length(split_script) == 1) {
@@ -91,23 +92,19 @@ if ('station_trend_analyse' %in% to_do) {
                 structure[[dir]] = c(structure[[dir]], var)
             }
             
-            if (var %in% var_analyse) {
-                next
-            }
-            
             if (hydroPeriod_mode == 'every') {
                 hydroPeriod = paste0(formatC(iHY, width=2, flag="0"),
                                      '-01')
                 
             } else if (hydroPeriod_mode == 'optimal') {
-                if (hydroPeriod_opti[[event]] == "min") {
+                if (identical(hydroPeriod_opti[[event]], "min")) {
                     Value = paste0(formatC(df_meta$minQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
                     hydroPeriod = tibble(code=df_meta$code,
                                          Value=Value)
-                } else if (hydroPeriod_opti[[event]] == "max") {
+                } else if (identical(hydroPeriod_opti[[event]], "max")) {
                     Value = paste0(formatC(df_meta$maxQM,
                                            width=2,
                                            flag="0"),
@@ -120,6 +117,10 @@ if ('station_trend_analyse' %in% to_do) {
             }
             monthHydroPeriod = substr(hydroPeriod[1], 1, 2)
 
+            if (var %in% var_analyse) {
+                next
+            }
+            
             var_analyse = c(var_analyse, var)
             type_analyse = c(type_analyse, type)
             event_analyse = c(event_analyse, event)

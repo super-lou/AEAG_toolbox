@@ -117,6 +117,7 @@ TXTlistname =
 
 ## 3. ANALYSIS PARAMETERS ____________________________________________
 init_var_file = 'default.R'
+init_tools_file = 'tools.R'
 var_dir = 'variable'
 var_to_analyse_dir =
     # ''
@@ -266,12 +267,14 @@ library(png)
 library(ggrepel)
 library(latex2exp)
 library(StatsAnalysisTrend)
+library(officer)
+library(sf)
+# already ::
 # library(lubridate)
-# library(trend)
 # library(Hmisc)
 # library(accelerometry)
 # library(CircStats)
 # library(tools)
-library(officer)
 # library(sp)
-library(sf)
+# potentialy useless
+# library(trend)
