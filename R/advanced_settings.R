@@ -131,8 +131,16 @@ to_assign_out = c(
 
 hydroPeriod_mode =
     # 'every'
-    'fixed'
+    # 'fixed'
+    'optimal'
 
+hydroPeriod_opti = list(
+    'Crue' = 'min',
+    'Crue Nivale' = "09-01",
+    'Moyennes Eaux' = 'min',
+    'Étiage' = c('05-01', '11-30')
+)
+    
 
 ### 3.2. Climate analysis ____________________________________________
 to_analyse_climate = c(

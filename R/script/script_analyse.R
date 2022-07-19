@@ -53,7 +53,6 @@ if ('station_trend_analyse' %in% to_do) {
 
     structure = replicate(length(event_to_analyse), c())
     names(structure) = event_to_analyse
-    # structure = append(list(Recap=c()), structure)
     
     var_analyse = c()
     type_analyse = c()
@@ -98,7 +97,26 @@ if ('station_trend_analyse' %in% to_do) {
             
             if (hydroPeriod_mode == 'every') {
                 hydroPeriod = paste0(formatC(iHY, width=2, flag="0"),
+                                     '-01')
+                
+            } else if (hydroPeriod_mode == 'optimal') {
+                if (hydroPeriod_opti[[event]] == "min") {
+                    Value = paste0(formatC(df_meta$minQM,
+                                           width=2,
+                                           flag="0"),
                                    '-01')
+                    hydroPeriod = tibble(code=df_meta$code,
+                                         Value=Value)
+                } else if (hydroPeriod_opti[[event]] == "max") {
+                    Value = paste0(formatC(df_meta$maxQM,
+                                           width=2,
+                                           flag="0"),
+                                   '-01')
+                    hydroPeriod = tibble(code=df_meta$code,
+                                         Value=Value)
+                } else {
+                    hydroPeriod = hydroPeriod_opti[[event]]
+                }
             }
             monthHydroPeriod = substr(hydroPeriod[1], 1, 2)
 

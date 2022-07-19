@@ -81,8 +81,8 @@ filename =
     # "all"
     c(
         # "Q0214010_HYDRO_QJM.txt",
-        "O5464310_HYDRO_QJM.txt",
-        "O3314010_HYDRO_QJM.txt",
+        # "O5464310_HYDRO_QJM.txt",
+        # "O3314010_HYDRO_QJM.txt",
         # "S2235610_HYDRO_QJM.txt"
         "O1484320_HYDRO_QJM.txt",
         "O0362510_HYDRO_QJM.txt"
@@ -107,8 +107,8 @@ filename =
 to_do =
     c(
         'station_extraction',
-        'station_trend_analyse'
-        # 'station_trend_plot'
+        'station_trend_analyse',
+        'station_trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
