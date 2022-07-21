@@ -82,6 +82,7 @@ if ('station_trend_plot' %in% to_do) {
                  type=type_analyse,
                  event=event_analyse,
                  unit=unit_analyse,
+                 hydroPeriod=hydroPeriod_analyse,
                  glose=glose_analyse,
                  structure=structure,
                  layout_matrix=matrix(seq(1:length(var_analyse)),

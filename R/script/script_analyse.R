@@ -58,6 +58,7 @@ if ('station_trend_analyse' %in% to_do) {
     type_analyse = c()
     event_analyse = c()
     unit_analyse = c()
+    hydroPeriod_analyse = list()
     glose_analyse = c()
     df_data_analyse = list()
     df_trend_analyse = list()
@@ -125,6 +126,8 @@ if ('station_trend_analyse' %in% to_do) {
             type_analyse = c(type_analyse, type)
             event_analyse = c(event_analyse, event)
             unit_analyse = c(unit_analyse, unit)
+            hydroPeriod_analyse = append(hydroPeriod_analyse,
+                                         list(hydroPeriod))
             glose_analyse = c(glose_analyse, glose)
 
             missingCode = c()
