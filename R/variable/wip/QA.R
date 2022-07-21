@@ -1,8 +1,8 @@
-var = "v_BF"
-type = "Volume"
-unit = "hm^{3}"
-glose = "Volume des écoulements lents (volume de l’intégrale sous la courbe du débit de base)"
-event = "Crue Nivale"
+var = "QA"
+type = "sévérité"
+unit = "m^{3}.s^{-1}"
+glose = "Moyenne annuelle du débit journalier"
+event = "Moyennes Eaux"
 hydroPeriod = c("09-01", "08-31")
 
 yearNA_lim = 10
@@ -13,8 +13,8 @@ functM = NULL
 functM_args = NULL
 isDateM = FALSE
 
-functY = compute_VolSnowmelt
-functY_args = NULL
+functY = mean
+functY_args = list(na.rm=TRUE)
 isDateY = FALSE
 
 functYT_ext = NULL

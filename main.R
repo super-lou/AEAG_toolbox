@@ -80,12 +80,13 @@ filename =
     # ""
     # "all"
     c(
-        # "Q0214010_HYDRO_QJM.txt",
-        # "O5464310_HYDRO_QJM.txt",
-        # "O3314010_HYDRO_QJM.txt",
+        # "Q0214010_HYDRO_QJM.txt"
+        # "O5464310_HYDRO_QJM.txt"
+        "O0384010_HYDRO_QJM.txt"
+        # "O3314010_HYDRO_QJM.txt"
         # "S2235610_HYDRO_QJM.txt"
-        "O1484320_HYDRO_QJM.txt",
-        "O0362510_HYDRO_QJM.txt"
+        # "O1484320_HYDRO_QJM.txt"
+        # "O0362510_HYDRO_QJM.txt"
         # "Q7002910_HYDRO_QJM.txt"
         # "^[O]"
     )
@@ -107,7 +108,7 @@ filename =
 to_do =
     c(
         # 'station_extraction',
-        # 'station_trend_analyse',
+        'station_trend_analyse',
         'station_trend_plot'
     )
 

@@ -122,8 +122,8 @@ var_dir = 'variable'
 var_to_analyse_dir =
     # ''
     # 'AEAG_selection'
-    # 'shiny'
-    'wip'
+    'shiny'
+    # 'wip'
 
 to_assign_out = c(
     # 'modified_data',
@@ -209,7 +209,7 @@ axis_xlim =
 #          'map' : map about trend analyses
 to_plot_station =
     c(
-        # 'summary'
+        # 'summary',
         'datasheet'
         # 'table'
         # 'map'
@@ -227,12 +227,12 @@ logo_to_show =
     )
 
 zone_to_show =
-    # 'France'
-    'Adour-Garonne'
+    'France'
+    # 'Adour-Garonne'
 
 pdf_chunk =
-    # 'by_code'
-    'all'
+    'by_code'
+    # 'all'
     
 show_colorEvent = TRUE
 
