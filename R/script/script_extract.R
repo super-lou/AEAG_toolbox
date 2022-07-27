@@ -97,11 +97,11 @@ if ('station_extraction' %in% to_do) {
     df_data = df_join$data
     df_meta = df_join$meta
     
-    df_data = df_data[order(df_data$code),]
-    df_meta = df_meta[order(df_meta$code),]
+    df_data = df_data[order(df_data$Code),]
+    df_meta = df_meta[order(df_meta$Code),]
 
     # Get all different stations code
-    Code = levels(factor(df_meta$code))
+    Code = rle(df_data$Code)$value
     
 ### 1.5. Add other info about stations _______________________________
     # Time gap

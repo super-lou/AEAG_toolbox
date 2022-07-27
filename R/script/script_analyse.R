@@ -103,14 +103,14 @@ if ('station_trend_analyse' %in% to_do) {
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    hydroPeriod = tibble(code=df_meta$code,
+                    hydroPeriod = tibble(Code=df_meta$Code,
                                          Value=Value)
                 } else if (identical(hydroPeriod_opti[[event]], "max")) {
                     Value = paste0(formatC(df_meta$maxQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    hydroPeriod = tibble(code=df_meta$code,
+                    hydroPeriod = tibble(Code=df_meta$Code,
                                          Value=Value)
                 } else {
                     hydroPeriod = hydroPeriod_opti[[event]]
@@ -143,8 +143,8 @@ if ('station_trend_analyse' %in% to_do) {
                     df_XEx_save = res_Xanalyse_save$extract
                     df_Xtrend_save = res_Xanalyse_save$estimate
 
-                    df_XEx_read = df_XEx_save[df_XEx_save$code %in% Code,]
-                    df_Xtrend_read = df_Xtrend_save[df_Xtrend_save$code %in% Code,]
+                    df_XEx_read = df_XEx_save[df_XEx_save$Code %in% Code,]
+                    df_Xtrend_read = df_Xtrend_save[df_Xtrend_save$Code %in% Code,]
                     df_Xtrend_read = df_Xtrend_read[df_Xtrend_read$input_period %in% input_trend_period,]
                     res_Xanalyse_read = list(extract=df_XEx_read, estimate=df_Xtrend_read)
                     
@@ -177,12 +177,12 @@ if ('station_trend_analyse' %in% to_do) {
                         #     df_Xmod_read = rbind(df_Xmod_read, df_Xmod_code)
                         # }
 
-                        isCodeExtract = any(code %in% df_XEx_read$code)
-                        isCodeEstimate = any(code %in% df_Xtrend_read$code)
+                        isCodeExtract = any(code %in% df_XEx_read$Code)
+                        isCodeEstimate = any(code %in% df_Xtrend_read$Code)
 
                         for (per in input_trend_period) {
                             df_Xtrend_code =
-                                df_Xtrend_read[df_Xtrend_read$code == code,]
+                                df_Xtrend_read[df_Xtrend_read$Code == code,]
                             isPerEstimate = any(per %in% df_Xtrend_code$input_period)
 
                             # if (!isCodeDataMod | !isCodeMod | !isCodeExtract | !isCodeEstimate | !isPerEstimate) {
@@ -201,8 +201,8 @@ if ('station_trend_analyse' %in% to_do) {
 
 
             if (!is.null(missingCode)) {
-                df_data_missing = df_data[df_data$code %in% missingCode,]
-                df_meta_missing = df_meta[df_meta$code %in% missingCode,]
+                df_data_missing = df_data[df_data$Code %in% missingCode,]
+                df_meta_missing = df_meta[df_meta$Code %in% missingCode,]
                 
                 res = get_Xtrend(var,
                                  df_data_missing, df_meta_missing,
@@ -360,15 +360,15 @@ if ('climate_trend_analyse' %in% to_do) {
     # For precipitation
     df_data_P = bind_cols(Date=df_climate_data$Date,
                           Value=df_climate_data$PRCP_mm,
-                          code=df_climate_data$code)
+                          code=df_climate_data$Code)
     # For temperature
     df_data_T = bind_cols(Date=df_climate_data$Date,
                           Value=df_climate_data$T_degC,
-                          code=df_climate_data$code)
+                          code=df_climate_data$Code)
     # For evapotranspiration
     df_data_ETP = bind_cols(Date=df_climate_data$Date,
                             Value=df_climate_data$PET_mm,
-                            code=df_climate_data$code)
+                            code=df_climate_data$Code)
 ### 3.4. Trend analyses ______________________________________________
     # TA trend
     res = get_Xtrend(df_data_P, df_climate_meta,

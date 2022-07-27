@@ -152,8 +152,8 @@ to_analyse_climate = c(
 
 ### 3.3. Data modification ___________________________________________
 # Local corrections of the data
-df_flag = data.frame(
-    code=c('O3141010',
+df_flag = tibble(
+    Code=c('O3141010',
            'O7635010',
            'O7635010',
            'O7635010',
@@ -231,8 +231,8 @@ zone_to_show =
     # 'Adour-Garonne'
 
 pdf_chunk =
-    'by_code'
-    # 'all'
+    # 'by_code'
+    'all'
     
 show_colorEvent = TRUE
 

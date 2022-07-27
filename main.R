@@ -17,7 +17,6 @@
 #
 # Ash R toolbox is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
-
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 #
@@ -60,7 +59,7 @@
 ## You can modify this part without risk ##      |___/ 
 
 ## 1. WORKING DIRECTORY ______________________________________________
-# Work path (it normally needs to end with '\\ash' directory)
+# Work path (it normally needs to end with '\\ashes' directory)
 computer_work_path = 
     "/home/louis/Documents/bouleau/INRAE/CDD_stationnarite/ashes_toolbox"
     # "C:\\Users\\louis.heraut\\Documents\\CDD_stationnarite\\ashes"
@@ -71,8 +70,8 @@ computer_work_path =
 # ash\\data\\.
 filedir =
     # ""
-    # "AEAG_selection"
-    "RRSE"
+    "AEAG_selection"
+    # "RRSE"
 
 # Name of the files that will be analysed from the data directory
 # (if "all", all the file of the directory will be chosen)
@@ -81,13 +80,13 @@ filename =
     # "all"
     c(
         # "Q0214010_HYDRO_QJM.txt"
-        "H7833520_HYDRO_QJM.txt"
+        # "H7833520_HYDRO_QJM.txt"
         # "O0384010_HYDRO_QJM.txt"
-        # "O3314010_HYDRO_QJM.txt"
-        # "S2235610_HYDRO_QJM.txt"
-        # "O1484320_HYDRO_QJM.txt"
-        # "O0362510_HYDRO_QJM.txt"
-        # "Q7002910_HYDRO_QJM.txt"
+        # "O3314010_HYDRO_QJM.txt",
+        # "S2235610_HYDRO_QJM.txt",
+        "O1484320_HYDRO_QJM.txt",
+        "O0362510_HYDRO_QJM.txt",
+        "Q7002910_HYDRO_QJM.txt"
         # "^[O]"
     )
 
@@ -108,8 +107,8 @@ filename =
 to_do =
     c(
         'station_extraction',
-        'station_trend_analyse'
-        # 'station_trend_plot'
+        'station_trend_analyse',
+        'station_trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
@@ -119,8 +118,8 @@ to_do =
 # - periodSub tends to represent the period with the most accessible
 # flow data
 periodAll =
-    c("1968-01-01", "2020-12-31")
-    # c("1900-01-01", "2020-12-31")
+    # c("1968-01-01", "2020-12-31")
+    c("1900-01-01", "2020-12-31")
 periodSub =
     NULL
     # c("1968-01-01", "2020-12-31")
