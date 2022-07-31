@@ -122,8 +122,8 @@ var_dir = 'variable'
 var_to_analyse_dir =
     # ''
     # 'AEAG_selection'
-    # 'shiny'
-    'wip'
+    'shiny'
+    # 'wip'
 
 to_assign_out = c(
     # 'modified_data',
