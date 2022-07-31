@@ -97,7 +97,7 @@ if ('station_trend_analyse' %in% to_do) {
                 hydroPeriod = paste0(formatC(iHY, width=2, flag="0"),
                                      '-01')
                 
-            } else if (hydroPeriod_mode == 'optimal') {
+            } else if (hydroPeriod_mode == 'optimale') {
                 if (identical(hydroPeriod_opti[[event]], "min")) {
                     Value = paste0(formatC(df_meta$minQM,
                                            width=2,

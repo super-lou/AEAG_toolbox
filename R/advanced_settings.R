@@ -132,8 +132,8 @@ to_assign_out = c(
 
 hydroPeriod_mode =
     # 'every'
-    'fixed'
-    # 'optimal'
+    # 'fixed'
+    'optimale'
 
 hydroPeriod_opti = list(
     'Crue' = 'min',
@@ -152,7 +152,7 @@ to_analyse_climate = c(
 
 ### 3.3. Data modification ___________________________________________
 # Local corrections of the data
-df_flag = tibble(
+df_flag = data.frame(
     Code=c('O3141010',
            'O7635010',
            'O7635010',
@@ -194,9 +194,9 @@ alpha = 0.1
 # If the hydrological network needs to be plot
 river_selection =
     "none"
-    # "all"
     # c("La Seine$", "'Yonne$", "La Marne$", "La Meuse", "La Moselle$", "^La Loire$", "^la Loire$", "^le cher$", "^La Creuse$", "^la Creuse$", "^La Vienne$", "^la Vienne$", "La Garonne$", "Le Tarn$", "Le Rhône$", "La Saône$")
-
+    # "all"
+    
 # Graphical selection of period
 axis_xlim =
     NULL
@@ -231,8 +231,8 @@ zone_to_show =
     # 'Adour-Garonne'
 
 pdf_chunk =
-    # 'by_code'
-    'all'
+    'by_code'
+    # 'all'
     
 show_colorEvent = TRUE
 
