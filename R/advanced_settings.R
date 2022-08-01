@@ -193,8 +193,8 @@ alpha = 0.1
 ## 4. PLOTTING PARAMETERS ____________________________________________
 # If the hydrological network needs to be plot
 river_selection =
-    "none"
-    # c("La Seine$", "'Yonne$", "La Marne$", "La Meuse", "La Moselle$", "^La Loire$", "^la Loire$", "^le cher$", "^La Creuse$", "^la Creuse$", "^La Vienne$", "^la Vienne$", "La Garonne$", "Le Tarn$", "Le Rhône$", "La Saône$")
+    # "none"
+    c("La Seine$", "'Yonne$", "La Marne$", "La Meuse", "La Moselle$", "^La Loire$", "^la Loire$", "^le cher$", "^La Creuse$", "^la Creuse$", "^La Vienne$", "^la Vienne$", "La Garonne$", "Le Tarn$", "Le Rhône$", "La Saône$")
     # "all"
     
 # Graphical selection of period
@@ -238,6 +238,10 @@ show_colorEvent = TRUE
 
 exQprob = 0.01
 
+toleranceRel =
+    # 1000
+    10000 # minimap
+
 
 ## 5. IMPORT _________________________________________________________
 dev_path = file.path(dirname(computer_work_path), 'ashes', 'R')
@@ -270,6 +274,7 @@ library(StatsAnalysisTrend)
 library(officer)
 library(sf)
 # already ::
+# library(rgeos)
 # library(lubridate)
 # library(Hmisc)
 # library(accelerometry)

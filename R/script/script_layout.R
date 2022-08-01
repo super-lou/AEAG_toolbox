@@ -34,15 +34,16 @@
 
 ## 0. SHAPEFILE LOADING ______________________________________________
 # Shapefile importation in order to do it only once time
-if (!exists("df_shapefile")) {
-    df_shapefile = load_shapefile(resources_path, df_meta,
-                                  fr_shpdir, fr_shpname,
-                                  bs_shpdir, bs_shpname,
-                                  sbs_shpdir, sbs_shpname,
-                                  cbs_shpdir, cbs_shpname, cbs_coord,
-                                  rv_shpdir, rv_shpname,
-                                  river_selection=river_selection)
-}
+# if (!exists("shapefile_list")) {
+    shapefile_list = load_shapefile(resources_path, df_data,
+                                    fr_shpdir, fr_shpname,
+                                    bs_shpdir, bs_shpname,
+                                    sbs_shpdir, sbs_shpname,
+                                    cbs_shpdir, cbs_shpname, cbs_coord,
+                                    rv_shpdir, rv_shpname,
+                                    river_selection=river_selection,
+                                    toleranceRel=toleranceRel)
+# }
 
 logo_path = load_logo(resources_path, logo_dir, PRlogo_file,
                       AEAGlogo_file, INRAElogo_file, FRlogo_file,
@@ -66,7 +67,7 @@ if ('station_serie_plot' %in% to_do) {
                  axis_xlim=axis_xlim,
                  layout_matrix=matrix(c(1, 2), ncol=1),
                  info_header=df_data,
-                 df_shapefile=df_shapefile,
+                 shapefile_list=shapefile_list,
                  figdir=figdir,
                  logo_path=logo_path,
                  pdf_chunk=pdf_chunk)
@@ -98,7 +99,7 @@ if ('station_trend_plot' %in% to_do) {
                  time_height=3,
                  var_ratio=3,
                  foot_height=1.25,
-                 df_shapefile=df_shapefile,
+                 shapefile_list=shapefile_list,
                  figdir=figdir,
                  filename_opt='',
                  resdir=resdir,
