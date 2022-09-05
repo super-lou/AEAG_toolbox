@@ -1,7 +1,6 @@
 # \\\
 # Copyright 2021-2022 Louis Héraut*1,
-#                     Éric Sauquet*2,
-#                     Valentin Mansanarez
+#                     Éric Sauquet*2
 #
 # *1   INRAE, France
 #      louis.heraut@inrae.fr
@@ -61,92 +60,441 @@
 ## 1. WORKING DIRECTORY ______________________________________________
 # Work path (it normally needs to end with '\\ashes' directory)
 computer_work_path = 
-    "/home/louis/Documents/bouleau/INRAE/CDD_stationnarite/ashes_toolbox"
-    # "C:\\Users\\louis.heraut\\Documents\\CDD_stationnarite\\ashes"
+    '/home/louis/Documents/bouleau/INRAE/project/ashes_project/ashes_toolbox'
 
 ## 2. DATA DIRECTORY _________________________________________________
 # Directory of Banque HYDRO data you want to use in ash\\data\\ to
-# extract stations flow data. If "" is use, data will be search in
+# extract stations flow data. If '' is use, data will be search in
 # ash\\data\\.
 filedir =
-    # ""
-    # "AEAG_selection"
-    "RRSE"
+    # ''
+    'AEAG_selection'
+    # 'RRSE'
 
 # Name of the files that will be analysed from the data directory
-# (if "all", all the file of the directory will be chosen)
+# (if 'all', all the file of the directory will be chosen)
 filename =
-    # ""
-    "all"
-    # c(
-        # "P5404010_HYDRO_QJM.txt"
-        # "Q0214010_HYDRO_QJM.txt"
-        # "H7833520_HYDRO_QJM.txt"
-        # "O0384010_HYDRO_QJM.txt",
-        # "O3314010_HYDRO_QJM.txt",
-        # "S2235610_HYDRO_QJM.txt",
-        # "O1484320_HYDRO_QJM.txt",
-        # "O0362510_HYDRO_QJM.txt"
-        # "Q7002910_HYDRO_QJM.txt"
-        # "^[O]"
-    # )
+    # ''
+    # 'all'
+    c(
+        # 'P5404010_HYDRO_QJM.txt'
+        # 'Q0214010_HYDRO_QJM.txt'
+        # 'H7833520_HYDRO_QJM.txt'
+        'O0384010_HYDRO_QJM.txt'
+        # 'O3314010_HYDRO_QJM.txt',
+        # 'S2235610_HYDRO_QJM.txt',
+        # 'O1484320_HYDRO_QJM.txt',
+        # 'O0362510_HYDRO_QJM.txt'
+        # 'Q7002910_HYDRO_QJM.txt'
+        # '^[O]'
+    )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
-# This vector regroups all the different step you want to do. For example if you write 'station_extraction', the extraction of the data for the station will be done. If you add also 'station_analyse', the extraction and then the trend analyse will be done. But if you only write, for example, 'station_plot', without having previously execute the code with 'station_extraction' and 'station_analyse', it will results in a failure.
-# All the option are :
-#    'station_extraction' : Extraction of data and metadata dataframes
-#                           about stations
-#    'climate_extraction' : Extraction of data and metadata dataframes
-#                           about climate data
-# 'station_trend_analyse' : Trend analyses of stations data
-#  'station_break_analyse' : Brief analysis of break data
-# 'climate_trend_analyse' : Trend analyses of the climate data
-#    'station_serie_plot' : Plotting of flow series for stations
-#    'station_trend_plot' : Plotting of trend analyses of stations
-#    'station_break_plot' : Plotting of the break analysis
-#    'climate_trend_plot' : Plotting of trend analyses of climate data
+# This vector regroups all the different step you want to do. For
+# example if you write 'station_extraction', the extraction of the
+# data for the station will be done. If you add also
+# 'station_analyse', the extraction and then the trend analyse will be
+# done. But if you only write, for example, 'station_plot', without
+# having previously execute the code with 'station_extraction' and 'station_analyse', it will results in a failure.
+#
+# Options are listed below with associated results after '>' :
+#
+# - 'station_extraction' : Extraction of data and metadata dataframes
+#                          about stations
+#            > 'df_data' : 
+#            > 'df_meta' :
+#
+# 
+# - 'climate_extraction' : Extraction of data and metadata dataframes
+#                          about climate data
+# - 'station_trend_analyse' : Trend analyses of stations data
+# - 'station_break_analyse' : Brief analysis of break data
+# - 'climate_trend_analyse' : Trend analyses of the climate data
+# - 'station_serie_plot' : Plotting of flow series for stations
+# - 'station_trend_plot' : Plotting of trend analyses of stations
+# - 'station_break_plot' : Plotting of the break analysis
+# - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
-        'station_extraction',
-        'station_trend_analyse',
+        # 'station_extraction',
+        # 'station_trend_analyse',
         'station_trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
 # Periods of time to perform the trend analyses. More precisely :
-# - periodAll tends to represent the maximal accessible period of flow
-# data hence the start in 1800
-# - periodSub tends to represent the period with the most accessible
-# flow data
+# - 'periodAll' tends to represent the maximal accessible period of
+#    flow data hence the start in 1800
+# - 'periodSub' tends to represent the period with the most accessible
+#    flow data
 periodAll =
-    # c("1968-01-01", "2020-12-31")
-    c("1900-01-01", "2020-12-31")
+    # c('1968-01-01', '2020-12-31')
+    c('1900-01-01', '2020-12-31')
 periodSub =
     NULL
-    # c("1968-01-01", "2020-12-31")
+    # c('1968-01-01', '2020-12-31')
 
 # Periods of time to average. More precisely :
-# - periodRef tends to represent the reference period of the climate
-# - periodCur tends to represent the current period
-# flow data
+# - 'periodRef' tends to represent the reference period of the climate
+# - 'periodCur' tends to represent the current period
+#    flow data
 periodRef =
     NULL
-    # c("1968-01-01", "1988-12-31")
+    # c('1968-01-01', '1988-12-31')
 periodCur =
     NULL
-    # c("2000-01-01", "2020-12-31")
+    # c('2000-01-01', '2020-12-31')
+
+
+#    _       _                               _ 
+#   /_\   __| |__ __ __ _  _ _   __  ___  __| |
+#  / _ \ / _` |\ V // _` || ' \ / _|/ -_)/ _` |
+# /_/ \_\\__,_| \_/ \__,_||_||_|\__|\___|\__,_| ______________________
+## You still can modify this part without major risk but it can be ##
+## less intuitive ##                                          
+
+## 1. FILE STRUCTURE _________________________________________________
+### 1.1. Input directories ___________________________________________
+# Path to the data
+computer_data_path = file.path(computer_work_path, 'data')
+
+# Resources directory
+resources_path = file.path(computer_work_path, 'resources')
+if (!(file.exists(resources_path))) {
+  dir.create(resources_path)
+}
+print(paste('resources_path :', resources_path))
+
+# Logo filename
+logo_dir = 'logo'
+PRlogo_file = 'logo_Prefet_bassin.png'
+AEAGlogo_file = 'agence-de-leau-adour-garonne_logo.png'
+INRAElogo_file = 'Logo-INRAE_Transparent.png'
+FRlogo_file = 'Republique_Francaise_RVB.png'
+
+shp_dir = 'map'
+# Path to the shapefile for france contour from 'computer_data_path' 
+fr_shpdir = file.path(shp_dir, 'france')
+fr_shpname = 'gadm36_FRA_0.shp'
+
+# Path to the shapefile for basin shape from 'computer_data_path' 
+bs_shpdir = file.path(shp_dir, 'bassin')
+bs_shpname = 'BassinHydrographique.shp'
+
+# Path to the shapefile for sub-basin shape from 'computer_data_path' 
+sbs_shpdir = file.path(shp_dir, 'sous_bassin')
+sbs_shpname = 'SousBassinHydrographique.shp'
+
+# Path to the shapefile for station basins shape from 'computer_data_path' 
+cbs_shpdir = file.path(shp_dir, 'bassin_station')
+cbs_shpname = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
+cbs_coord = c('L93', 'L2')
+
+# Path to the shapefile for river shape from 'computer_data_path' 
+rv_shpdir = file.path('map', 'river')
+rv_shpname = 'CoursEau_FXX.shp'
+
+### 1.2. Output directories __________________________________________
+# Result directory
+resdir = file.path(computer_work_path, 'results')
+if (!(file.exists(resdir))) {
+  dir.create(resdir)
+}
+print(paste('resdir :', resdir))
+
+# Result sub directory
+modified_data_dir = 'modified_data'
+trend_dir = 'trend_analyses'
+
+# Figure directory
+figdir = file.path(computer_work_path, 'figures')
+if (!(file.exists(figdir))) {
+  dir.create(figdir)
+}
+print(paste('figdir :', figdir))
+
+
+## 2. STATION SELECTION BY LIST ______________________________________
+### 2.1. Selection with '.docx' file _________________________________
+# Path to a '.docx' list file of station that will be analysed
+DOCXlistdir = 
+    ''
+
+DOCXlistname = 
+    ''
+    # 'Liste-station_RRSE.docx' 
+
+### 2.2. Selection with '.txt' file __________________________________
+# Path to the '.txt' list file of station that will be analysed
+# It can be generated with :
+# create_selection(computer_data_path, 'dirname', 'selection.txt')
+TXTlistdir =
+    ''
+
+TXTlistname = 
+    ''
+    # 'selection.txt'
+
+
+## 3. DATA CORRECTION ________________________________________________
+# Local corrections of the data
+df_flag = data.frame(
+    Code=c('O3141010',
+           'O7635010',
+           'O7635010',
+           'O7635010',
+           'O7635010'
+           ),
+    Date=c('1974-07-04',
+           '1948-09-06',
+           '1949-02-08',
+           '1950-07-20',
+           '1953-07-22'
+           ),
+    newValue=c(9.5,
+               4,
+               3,
+               1,
+               3) # /!\ Unit
+)
+
+
+## 4. ANALYSED VARIABLES _____________________________________________
+### 4.1. Hydrological variables ______________________________________
+# Name of the directory that regroups all variables information
+var_dir = 'variable'
+# Name of the default parameters file for a variable
+init_var_file = 'default.R'
+# Name of the tool file that includes all the functions needed to
+# calculate a variable
+init_tools_file = 'tools.R'
+
+# Name of the subdirectory in 'var_dir' that includes variables to
+# analyse. If no subdirectory is selected, all variable files will be
+# used in 'var_dir' (which is may be too much).
+# This subdirectory can follows some rules :
+# - Variable files can be rename to began with a number followed by an
+#   underscore '_' to create an order in variables. For example,
+#   '2_QA.R' will be analysed and plotted after '1_QMNA.R'.
+# - Directory of variable files can also be created in order to make a
+#   group of variable of similar event. Names should be chosen between
+#   'Crue'/'Crue Nivale'/'Moyennes Eaux' and 'Étiage'. A directory can
+#   also be named 'Resume' in order to not include variables in an
+#   event group.
+var_to_analyse_dir =
+    # ''
+    # 'AEAG_selection'
+    # 'shiny'
+    'wip'
+
+### 4.2. Climate variables ___________________________________________
+to_analyse_climate = c(
+    'PA',
+    'TA',
+    'ETPA'
+)
+
+
+## 5. STATISTICAL OPTIONS ____________________________________________
+# The risk of the Mann-Kendall trend detection test
+alpha = 0.1
+
+# Mode of selection of the hydrological period. Options are : 
+# - 'every' : Each month will be use one by one as a start of the
+#             hydrological year
+# - 'fixed' : Hydrological year is selected with the hydrological year
+#             noted in the variable file in 'var_dir'
+# - 'optimale' : Hydrological period is determined for each station by
+#                following rules listed in the next variable.
+hydroPeriod_mode =
+    # 'every'
+    # 'fixed'
+    'optimale'
+
+# Parameters for the optimal selection of the hydrological year. As
+# you can see, the optimisation is separated between each hydrological
+# event. You must therefore select an optimisation for each event. The
+# possibilities are:
+# - 'min' or 'max' to choose the month associated with the minimum or
+#   maximum of the mean monthly flow as the beginning of the
+#   hydrological year.
+# - A month and a day separated by a '-' in order to directly select
+#   the beginning of the hydrological year.
+# - A vector of two months and day to select a beginning and an end of
+#   the hydrological year.
+hydroPeriod_opti = list(
+    'Crue' = 'min',
+    'Crue Nivale' = '09-01',
+    'Moyennes Eaux' = 'min',
+    'Étiage' = c('05-01', '11-30')
+)
+
+
+## 6. READING AND WRITING OF RESULTS _________________________________
+### 6.1. Reading _____________________________________________________
+# If you want to read results that have already been saved
+read_results = FALSE
+
+### 6.2. Writing data on RAM _________________________________________
+# If you want to save on RAM all the results or not. If no option is
+# selected, only the last results will be stored on RAM (because
+# results are overwrites each time in order  to save place).
+# Variable names stored will be :
+# - 'df_Xdata' : Modified flow data for every station
+# - 'df_Xmod' : Historic of modification of flow data
+# - 'df_XEx' : Extracted data
+# - 'df_Xtrend' : Trend results
+# - 'res_Xanalyse' : List of 'df_XEx' and 'df_Xtrend'
+# Otherwise, if you select 'modified_data', only 'df_Xdata' and
+# 'df_Xmod' will be save under the same name with 'X'replaced by the
+# corresponding variable name. And similarly, if 'analyse' is
+# selected, only 'df_XEx', 'df_Xtrend' and 'res_Xanalyse' are saved
+# for each variable.
+to_assign_out = c(
+    # 'modified_data',
+    # 'analyse'
+)
+
+### 6.3. Writing data on disc ________________________________________
+# 
+saving = c(
+    # 'meta',
+    # 'modified_data',
+    # 'analyse'
+)
+
+#
+fast_format = TRUE
+
+### 6.4. Writing figure ______________________________________________
+# How the pdf will be constructed. If you choose 'by_code', a pdf will
+# be save for each station. Otherwise, if you choose 'all', every
+# figure will be saved as one pdf.
+pdf_chunk =
+    'by_code'
+# 'all'
+
+
+## 7. PLOTTING PARAMETERS ____________________________________________
+### 
+# What you want to be plotted for station analyses. For example if 'datasheet' is wrote, datasheet about each stations will be drawn.
+# All the option are :
+#    'datasheet' : datasheet of trend analyses for each stations
+#        'table' : summarizing table about trend analyses
+#          'map' : map about trend analyses
+to_plot_station =
+    c(
+        # 'summary',
+        'datasheet'
+        # 'table'
+        # 'map'
+        # 'map_regime'
+        # 'map_trend'
+        # 'map_mean'
+    )
+
+
+# If the hydrological network needs to be plot
+river_selection =
+    # 'none'
+    c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
+    # 'all'
+
+toleranceRel =
+    # 1000
+    10000 # minimap
+
+    
+# Graphical selection of period
+axis_xlim =
+    NULL
+# c('1982-01-01', '1983-01-01')
 
 
 
-#  ___               ___              __  _       
-# |   \  ___ __ __  / __| ___  _ _   / _|(_) __ _ 
-# | |) |/ -_)\ V / | (__ / _ \| ' \ |  _|| |/ _` |
-# |___/ \___| \_/   \___|\___/|_||_||_|  |_|\__, | ___________________
-## /!\ Do not touch if you are not aware ## |___/
+logo_to_show =
+    c(
+        # 'PR',
+        'FR',
+        'INRAE'
+        # 'AEAG'
+    )
+
+zone_to_show =
+    'France'
+    # 'Adour-Garonne'
+
+show_colorEvent = TRUE
+
+exQprob = 0.01
+
+
+
+#  ___              ___             _   
+# |   \  ___ __ __ | _ \ __ _  _ _ | |_ 
+# | |) |/ -_)\ V / |  _// _` || '_||  _|
+# |___/ \___| \_/  |_|  \__,_||_|   \__| _____________________________
+## /!\ Do not touch if you are not aware ##
 
 ## 0. INITIALISATION _________________________________________________
 # Sets working directory
 setwd(computer_work_path)
+
+# Import ashes
+dev_path = file.path(dirname(computer_work_path), 'ashes', 'R')
+if (file.exists(dev_path)) {
+    print('Loading ashes from local directory')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+    for (path in list_path) {
+        source(path, encoding='UTF-8')    
+    }
+} else {
+    print('Loading ashes from package')
+    library(ashes)
+}
+
+# Import dataSHEEP
+dev_path = file.path(dirname(dirname(computer_work_path)),
+                     'dataSHEEP_project', 'dataSHEEP', 'R')
+if (file.exists(dev_path)) {
+    print('Loading dataSHEEP from local directory')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+    for (path in list_path) {
+        source(path, encoding='UTF-8')    
+    }
+} else {
+    print('Loading dataSHEEP from package')
+    library(dataSHEEP)
+}
+
+# Import other library
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(qpdf)
+library(gridExtra)
+library(gridtext)
+library(grid)
+library(ggh4x)
+library(RColorBrewer)
+library(rgdal)
+library(shadowtext)
+library(png)
+library(ggrepel)
+library(latex2exp)
+library(StatsAnalysisTrend)
+library(officer)
+library(sf)
+# already ::
+# library(rgeos)
+# library(lubridate)
+# library(Hmisc)
+# library(accelerometry)
+# library(CircStats)
+# library(tools)
+# library(sp)
+# potentialy useless
+# library(trend)
 
 # Creates list of period for trend analysis
 trend_period = NULL
@@ -167,8 +515,6 @@ if (!is.null(periodCur)) {
 
 input_trend_period = sapply(trend_period, paste, collapse='/')
 
-# Sourcing the R file of advanced settings
-source(file.path('R', 'advanced_settings.R'), encoding='UTF-8')
 
 ## 1. EXTRACTION _____________________________________________________
 if ('station_extraction' %in% to_do | 'climate_extraction' %in% to_do) {

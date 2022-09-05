@@ -122,8 +122,8 @@ var_dir = 'variable'
 var_to_analyse_dir =
     # ''
     # 'AEAG_selection'
-    'shiny'
-    # 'wip'
+    # 'shiny'
+    'wip'
 
 to_assign_out = c(
     # 'modified_data',
@@ -251,9 +251,22 @@ if (file.exists(dev_path)) {
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
-
 } else {
+    print('Loading ashes from package')
     library(ashes)
+}
+
+dev_path = file.path(dirname(dirname(computer_work_path)),
+                     'dataSHEEP_project', 'dataSHEEP', 'R')
+if (file.exists(dev_path)) {
+    print('Loading dataSHEEP from local directory')
+    list_path = list.files(dev_path, pattern="*.R$", full.names=TRUE)
+    for (path in list_path) {
+        source(path, encoding='UTF-8')    
+    }
+} else {
+    print('Loading dataSHEEP from package')
+    library(dataSHEEP)
 }
 
 library(dplyr)

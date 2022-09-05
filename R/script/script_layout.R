@@ -34,7 +34,7 @@
 
 ## 0. SHAPEFILE LOADING ______________________________________________
 # Shapefile importation in order to do it only once time
-# if (!exists("shapefile_list")) {
+if (!exists("shapefile_list")) {
     shapefile_list = load_shapefile(resources_path, df_data,
                                     fr_shpdir, fr_shpname,
                                     bs_shpdir, bs_shpname,
@@ -43,7 +43,7 @@
                                     rv_shpdir, rv_shpname,
                                     river_selection=river_selection,
                                     toleranceRel=toleranceRel)
-# }
+}
 
 logo_path = load_logo(resources_path, logo_dir, PRlogo_file,
                       AEAGlogo_file, INRAElogo_file, FRlogo_file,
@@ -65,7 +65,6 @@ if ('station_serie_plot' %in% to_do) {
                  event=list('chronique', 'chronique'),
                  unit=list('m^{3}.s^{-1}', 'm^{3/2}.s^{-1/2}'),
                  axis_xlim=axis_xlim,
-                 layout_matrix=matrix(c(1, 2), ncol=1),
                  info_header=df_data,
                  shapefile_list=shapefile_list,
                  figdir=figdir,
@@ -86,8 +85,6 @@ if ('station_trend_plot' %in% to_do) {
                  hydroPeriod=hydroPeriod_analyse,
                  glose=glose_analyse,
                  structure=structure,
-                 layout_matrix=matrix(seq(1:length(var_analyse)),
-                                      ncol=1),
                  trend_period=trend_period,
                  mean_period=mean_period,
                  colorForce=TRUE,
@@ -143,7 +140,6 @@ if ('climate_trend_plot' %in% to_do) {
         event=event_climate,
         unit=unit_climate,
         glose=glose_climate,
-        layout_matrix=matrix(c(1, 2, 3), ncol=1),
         trend_period=trend_period,
         mean_period=mean_period,
         colorForce=TRUE,
