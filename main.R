@@ -14,8 +14,8 @@
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
 #
-# Ash R toolbox is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
+# Ashes R toolbox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 #
@@ -95,21 +95,32 @@ filename =
 # data for the station will be done. If you add also
 # 'station_analyse', the extraction and then the trend analyse will be
 # done. But if you only write, for example, 'station_plot', without
-# having previously execute the code with 'station_extraction' and 'station_analyse', it will results in a failure.
+# having previously execute the code with 'station_extraction' and
+# 'station_analyse', it will results in a failure.
 #
 # Options are listed below with associated results after '>' :
 #
-# - 'station_extraction' : Extraction of data and metadata dataframes
+# - 'station_extraction' : Extraction of data and meta data tibbles
 #                          about stations
-#            > 'df_data' : 
-#            > 'df_meta' :
+#                          > 'df_data' 
+#                          > 'df_meta'
 #
-# 
-# - 'climate_extraction' : Extraction of data and metadata dataframes
+# - 'climate_extraction' : Extraction of data and metadata tibbles
 #                          about climate data
+#                          > 'df_data' 
+#                          > 'df_meta'
+#
 # - 'station_trend_analyse' : Trend analyses of stations data
+#                             > 'df_XEx' : tibble of extracted data
+#                             > 'df_Xtrend' : tibble of trend results
+#
 # - 'station_break_analyse' : Brief analysis of break data
+#                             > 'df_break' : tibble of break results
+#
 # - 'climate_trend_analyse' : Trend analyses of the climate data
+#                             > 'df_XEx' : tibble of extracted data
+#                             > 'df_Xtrend' : tibble of trend results
+#
 # - 'station_serie_plot' : Plotting of flow series for stations
 # - 'station_trend_plot' : Plotting of trend analyses of stations
 # - 'station_break_plot' : Plotting of the break analysis
@@ -356,14 +367,19 @@ to_assign_out = c(
 )
 
 ### 6.3. Writing data on disc ________________________________________
-# 
+# It is possible to save the data under txt files.
+# Options are :
+# - 'meta' : saves 'df_meta' the data frame of meta informations
+# - 'modified_data' : saves modified 'df_data' data frame that take
+#   corrections into account
+# - 'analyse' : saves results of the trend analyse
 saving = c(
     # 'meta',
     # 'modified_data',
     # 'analyse'
 )
 
-#
+# If TRUE, data will be saved in 'fst' which is a fast format otherwise the default format is 'txt'
 fast_format = TRUE
 
 ### 6.4. Writing figure ______________________________________________
@@ -376,7 +392,7 @@ pdf_chunk =
 
 
 ## 7. PLOTTING PARAMETERS ____________________________________________
-### 
+### 7.1. What do you want to plot ____________________________________
 # What you want to be plotted for station analyses. For example if 'datasheet' is wrote, datasheet about each stations will be drawn.
 # All the option are :
 #    'datasheet' : datasheet of trend analyses for each stations
@@ -393,6 +409,16 @@ to_plot_station =
         # 'map_mean'
     )
 
+### 7.2. What do you want to show ____________________________________
+# Do you want to show small insert of color based on the studied
+# event in the upper left corner of datasheet
+show_colorEvent = TRUE
+
+# Which part of the globe do you want to show in the datasheet
+# mini map
+zone_to_show =
+    'France'
+    # 'Adour-Garonne'
 
 # If the hydrological network needs to be plot
 river_selection =
@@ -400,18 +426,7 @@ river_selection =
     c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
     # 'all'
 
-toleranceRel =
-    # 1000
-    10000 # minimap
-
-    
-# Graphical selection of period
-axis_xlim =
-    NULL
-# c('1982-01-01', '1983-01-01')
-
-
-
+# Which logo do you want to show in the footnote
 logo_to_show =
     c(
         # 'PR',
@@ -420,14 +435,22 @@ logo_to_show =
         # 'AEAG'
     )
 
-zone_to_show =
-    'France'
-    # 'Adour-Garonne'
+### 7.3. Other _______________________________________________________
+# Tolerance of the simplification algorithm for shapefile in sf
+toleranceRel =
+    # 1000 # normal map
+    10000 # mini map
+    
+# Graphical selection of period for a zoom
+axis_xlim =
+    NULL
+# c('1982-01-01', '1983-01-01')
 
-show_colorEvent = TRUE
-
+# Probability used to define the min and max quantile needed for
+# colorbar extremes. For example, if set to 0.01, quartile 1 and
+# quantile 99 will be used as the minimum and maximum values to assign
+# to minmimal maximum colors.
 exQprob = 0.01
-
 
 
 #  ___              ___             _   
@@ -519,20 +542,20 @@ input_trend_period = sapply(trend_period, paste, collapse='/')
 ## 1. EXTRACTION _____________________________________________________
 if ('station_extraction' %in% to_do | 'climate_extraction' %in% to_do) {
     print('EXTRACTION')
-    source(file.path('R', 'script', 'script_extract.R'),
+    source(file.path('R', 'script_extract.R'),
            encoding='UTF-8')
 }
 
 ## 2. ANALYSES _______________________________________________________
 if ('station_trend_analyse' %in% to_do | 'station_break_analyse' %in% to_do | 'climate_trend_analyse' %in% to_do) {
     print('ANALYSES')
-    source(file.path('R', 'script', 'script_analyse.R'),
+    source(file.path('R', 'script_analyse.R'),
            encoding='UTF-8')
 }
 
 ## 3. PLOTTING _______________________________________________________
 if ('station_serie_plot' %in% to_do | 'station_trend_plot' %in% to_do | 'station_break_plot' %in% to_do | 'climate_trend_plot' %in% to_do) {
     print('PLOTTING')
-    source(file.path('R', 'script', 'script_layout.R'),
+    source(file.path('R', 'script_layout.R'),
            encoding='UTF-8')
 }
