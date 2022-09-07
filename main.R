@@ -476,18 +476,18 @@ if (file.exists(dev_path)) {
     library(ashes)
 }
 
-# Import dataSHEEP
+# Import waterSheep
 dev_path = file.path(dirname(dirname(computer_work_path)),
-                     'dataSHEEP_project', 'dataSHEEP', 'R')
+                     'waterSheep_project', 'waterSheep', 'R')
 if (file.exists(dev_path)) {
-    print('Loading dataSHEEP from local directory')
+    print('Loading waterSheep from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
 } else {
-    print('Loading dataSHEEP from package')
-    library(dataSHEEP)
+    print('Loading waterSheep from package')
+    library(waterSheep)
 }
 
 # Import other library
