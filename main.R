@@ -80,13 +80,13 @@ filename =
         # 'P5404010_HYDRO_QJM.txt'
         # 'Q0214010_HYDRO_QJM.txt'
         # 'H7833520_HYDRO_QJM.txt'
-        'O0384010_HYDRO_QJM.txt'
+        # 'O0384010_HYDRO_QJM.txt'
         # 'O3314010_HYDRO_QJM.txt',
         # 'S2235610_HYDRO_QJM.txt',
         # 'O1484320_HYDRO_QJM.txt',
         # 'O0362510_HYDRO_QJM.txt'
         # 'Q7002910_HYDRO_QJM.txt'
-        # '^[O]'
+        '^[O]'
     )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
@@ -127,9 +127,9 @@ filename =
 # - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
-        # 'station_extraction',
-        # 'station_trend_analyse',
-        'station_trend_plot'
+        # 'station_extraction'
+        # 'station_trend_analyse'
+        # 'station_trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
@@ -464,7 +464,8 @@ exQprob = 0.01
 setwd(computer_work_path)
 
 # Import ashes
-dev_path = file.path(dirname(computer_work_path), 'ashes', 'R')
+dev_path = file.path(dirname(computer_work_path),
+                     'ashes_project', 'ashes', 'R')
 if (file.exists(dev_path)) {
     print('Loading ashes from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
