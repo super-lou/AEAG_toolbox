@@ -3,19 +3,20 @@ type = ""
 unit = ""
 glose = ""
 event = ""
-hydroPeriod = c("01-01", "12-31")
 
-yearNA_lim = NULL
-dayNA_lim = NULL
+NAyear_lim = NULL
+NApct_lim = NULL
 day_to_roll = NULL
 
 functM = NULL
 functM_args = NULL
 isDateM = FALSE
+samplePeriodM = NULL
 
 functY = NULL
 functY_args = NULL
 isDateY = FALSE
+samplePeriodY = NULL
 
 functYT_ext = NULL
 functYT_ext_args = NULL

@@ -77,16 +77,16 @@ filename =
     # ''
     # 'all'
     c(
-        # 'P5404010_HYDRO_QJM.txt'
-        # 'Q0214010_HYDRO_QJM.txt'
-        # 'H7833520_HYDRO_QJM.txt'
-        # 'O0384010_HYDRO_QJM.txt'
+        # 'P5404010_HYDRO_QJM.txt',
+        # 'Q0214010_HYDRO_QJM.txt',
+        # 'H7833520_HYDRO_QJM.txt',
+        'O0384010_HYDRO_QJM.txt'
         # 'O3314010_HYDRO_QJM.txt',
         # 'S2235610_HYDRO_QJM.txt',
         # 'O1484320_HYDRO_QJM.txt',
         # 'O0362510_HYDRO_QJM.txt'
         # 'Q7002910_HYDRO_QJM.txt'
-        '^[O]'
+        # '^[O]'
     )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
@@ -127,8 +127,8 @@ filename =
 # - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
-        # 'station_extraction'
-        # 'station_trend_analyse'
+        'station_extraction',
+        'station_trend_analyse'
         # 'station_trend_plot'
     )
 
@@ -164,7 +164,7 @@ periodCur =
 ## You still can modify this part without major risk but it can be ##
 ## less intuitive ##                                          
 
-## 1. FILE STRUCTURE _________________________________________________
+## 1. FILES STRUCTURE _________________________________________________
 ### 1.1. Input directories ___________________________________________
 # Path to the data
 computer_data_path = file.path(computer_work_path, 'data')
@@ -300,9 +300,9 @@ var_to_analyse_dir =
 
 ### 4.2. Climate variables ___________________________________________
 to_analyse_climate = c(
-    'PA',
-    'TA',
-    'ETPA'
+    # 'PA',
+    # 'TA',
+    # 'ETPA'
 )
 
 
@@ -317,10 +317,10 @@ alpha = 0.1
 #             noted in the variable file in 'var_dir'
 # - 'optimale' : Hydrological period is determined for each station by
 #                following rules listed in the next variable.
-hydroPeriod_mode =
+samplePeriodY_mode =
     # 'every'
-    # 'fixed'
-    'optimale'
+    'fixed'
+    # 'optimale'
 
 # Parameters for the optimal selection of the hydrological year. As
 # you can see, the optimisation is separated between each hydrological
@@ -333,7 +333,7 @@ hydroPeriod_mode =
 #   the beginning of the hydrological year.
 # - A vector of two months and day to select a beginning and an end of
 #   the hydrological year.
-hydroPeriod_opti = list(
+samplePeriodY_opti = list(
     'Crue' = 'min',
     'Crue Nivale' = '09-01',
     'Moyennes Eaux' = 'min',
@@ -387,8 +387,8 @@ fast_format = TRUE
 # be save for each station. Otherwise, if you choose 'all', every
 # figure will be saved as one pdf.
 pdf_chunk =
-    'by_code'
-# 'all'
+    # 'by_code'
+    'all'
 
 
 ## 7. PLOTTING PARAMETERS ____________________________________________
@@ -438,8 +438,8 @@ logo_to_show =
 ### 7.3. Other _______________________________________________________
 # Tolerance of the simplification algorithm for shapefile in sf
 toleranceRel =
-    # 1000 # normal map
-    10000 # mini map
+    1000 # normal map
+    # 10000 # mini map
     
 # Graphical selection of period for a zoom
 axis_xlim =
@@ -463,9 +463,23 @@ exQprob = 0.01
 # Sets working directory
 setwd(computer_work_path)
 
+# Import MKstat
+dev_path = file.path(dirname(dirname(computer_work_path)),
+                     'MKstat_project', 'MKstat', 'R')
+if (file.exists(dev_path)) {
+    print('Loading MKstat from local directory')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+    for (path in list_path) {
+        source(path, encoding='UTF-8')    
+    }
+} else {
+    print('Loading MKstat from package')
+    library(MKstat)
+}
+
 # Import ashes
 dev_path = file.path(dirname(computer_work_path),
-                     'ashes_project', 'ashes', 'R')
+                     'ashes', 'R')
 if (file.exists(dev_path)) {
     print('Loading ashes from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)

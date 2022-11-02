@@ -58,7 +58,7 @@ if ('station_trend_analyse' %in% to_do) {
     type_analyse = c()
     event_analyse = c()
     unit_analyse = c()
-    hydroPeriod_analyse = list()
+    samplePeriodY_analyse = list()
     glose_analyse = c()
     df_data_analyse = list()
     df_trend_analyse = list()
@@ -66,13 +66,13 @@ if ('station_trend_analyse' %in% to_do) {
 ### 1.3. Trend analyses ______________________________________________
     for (script in script_to_analyse) {
 
-        if (hydroPeriod_mode == 'every') {
-            nHydroPeriod = 12
+        if (samplePeriodY_mode == 'every') {
+            nSamplePeriod = 12
         } else {
-            nHydroPeriod = 1
+            nSamplePeriod = 1
         }
             
-        for (iHY in 1:nHydroPeriod) {
+        for (iHY in 1:nSamplePeriod) {
 
             source(file.path('R', var_dir, init_var_file),
                    encoding='UTF-8')
@@ -93,30 +93,30 @@ if ('station_trend_analyse' %in% to_do) {
                 structure[[dir]] = c(structure[[dir]], var)
             }
             
-            if (hydroPeriod_mode == 'every') {
-                hydroPeriod = paste0(formatC(iHY, width=2, flag="0"),
+            if (samplePeriodY_mode == 'every') {
+                samplePeriodY = paste0(formatC(iHY, width=2, flag="0"),
                                      '-01')
                 
-            } else if (hydroPeriod_mode == 'optimale') {
-                if (identical(hydroPeriod_opti[[event]], "min")) {
+            } else if (samplePeriodY_mode == 'optimale') {
+                if (identical(samplePeriodY_opti[[event]], "min")) {
                     Value = paste0(formatC(df_meta$minQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    hydroPeriod = tibble(Code=df_meta$Code,
+                    samplePeriodY = tibble(Code=df_meta$Code,
                                          Value=Value)
-                } else if (identical(hydroPeriod_opti[[event]], "max")) {
+                } else if (identical(samplePeriodY_opti[[event]], "max")) {
                     Value = paste0(formatC(df_meta$maxQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    hydroPeriod = tibble(Code=df_meta$Code,
+                    samplePeriodY = tibble(Code=df_meta$Code,
                                          Value=Value)
                 } else {
-                    hydroPeriod = hydroPeriod_opti[[event]]
+                    samplePeriodY = samplePeriodY_opti[[event]]
                 }
             }
-            monthHydroPeriod = substr(hydroPeriod[1], 1, 2)
+            monthSamplePeriod = substr(samplePeriodY[1], 1, 2)
 
             if (var %in% var_analyse) {
                 next
@@ -126,13 +126,13 @@ if ('station_trend_analyse' %in% to_do) {
             type_analyse = c(type_analyse, type)
             event_analyse = c(event_analyse, event)
             unit_analyse = c(unit_analyse, unit)
-            hydroPeriod_analyse = append(hydroPeriod_analyse,
-                                         list(hydroPeriod))
+            samplePeriodY_analyse = append(samplePeriodY_analyse,
+                                         list(samplePeriodY))
             glose_analyse = c(glose_analyse, glose)
 
             missingCode = c()
             if (read_results) {
-                trend_path = file.path(trend_dir, var, monthHydroPeriod)
+                trend_path = file.path(trend_dir, var, monthSamplePeriod)
                 isExtract = file.exists(file.path(resdir, trend_path,
                                                   'extract.txt'))
                 isEstimate = file.exists(file.path(resdir, trend_path,
@@ -149,7 +149,7 @@ if ('station_trend_analyse' %in% to_do) {
                     res_Xanalyse_read = list(extract=df_XEx_read, estimate=df_Xtrend_read)
                     
                     # modified_data_path = file.path(modified_data_dir, var,
-                                                   # monthHydroPeriod)
+                                                   # monthSamplePeriod)
                     
                     # df_Xdata_read = tibble()
                     # df_Xmod_read = tibble()
@@ -207,17 +207,18 @@ if ('station_trend_analyse' %in% to_do) {
                 res = get_Xtrend(var,
                                  df_data_missing, df_meta_missing,
                                  period=trend_period,
-                                 hydroPeriod=hydroPeriod,
                                  df_flag=df_flag,
-                                 yearNA_lim=yearNA_lim,
-                                 dayNA_lim=dayNA_lim,
+                                 NApct_lim=NApct_lim,
+                                 NAyear_lim=NAyear_lim,
                                  day_to_roll=day_to_roll,
                                  functM=functM,
                                  functM_args=functM_args,
                                  isDateM=isDateM,
+                                 samplePeriodM=samplePeriodM,
                                  functY=functY,
                                  functY_args=functY_args,
                                  isDateY=isDateY,
+                                 samplePeriodY=samplePeriodY,
                                  functYT_ext=functYT_ext,
                                  functYT_ext_args=functYT_ext_args,
                                  isDateYT_ext=isDateYT_ext,
@@ -273,13 +274,13 @@ if ('station_trend_analyse' %in% to_do) {
                 # Writes modified data
                 write_data(df_Xdata, df_Xmod, resdir,
                            filedir=file.path(modified_data_dir,
-                                             var, monthHydroPeriod))
+                                             var, monthSamplePeriod))
                 
                 if (fast_format) {
                     write_dataFST(df_Xdata, resdir,
                                   filedir='fst',
                                   filename=paste0('data_', var,
-                                                  '_', monthHydroPeriod,
+                                                  '_', monthSamplePeriod,
                                                   '.fst'))
                 }
             }
@@ -288,14 +289,14 @@ if ('station_trend_analyse' %in% to_do) {
                 # Writes trend analysis results
                 write_analyse(res_Xanalyse, resdir,
                               filedir=file.path(trend_dir,
-                                                var, monthHydroPeriod))
+                                                var, monthSamplePeriod))
                 
                 if (fast_format) {
                     write_dataFST(df_XEx,
                                   resdir,
                                   filedir='fst',
                                   filename=paste0(var, 'Ex_',
-                                                  monthHydroPeriod,
+                                                  monthSamplePeriod,
                                                   '.fst'))
                 }
             }
