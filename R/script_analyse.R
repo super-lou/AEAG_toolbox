@@ -205,7 +205,7 @@ if ('station_trend_analyse' %in% to_do) {
                 df_meta_missing = df_meta[df_meta$Code %in% missingCode,]
                 
                 res = get_Xtrend(var,
-                                 df_data_missing, df_meta_missing,
+                                 df_data_missing,# df_meta_missing,
                                  period=trend_period,
                                  df_flag=df_flag,
                                  NApct_lim=NApct_lim,
