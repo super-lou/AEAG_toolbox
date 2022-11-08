@@ -82,7 +82,7 @@ if ('station_trend_plot' %in% to_do) {
                  type=type_analyse,
                  event=event_analyse,
                  unit=unit_analyse,
-                 hydroPeriod=hydroPeriod_analyse,
+                 samplePeriod=samplePeriod_analyse,
                  glose=glose_analyse,
                  structure=structure,
                  trend_period=trend_period,
@@ -131,9 +131,9 @@ if ('climate_trend_plot' %in% to_do) {
             res_ETPAtrend$data
         ),
         df_trend=list(
-            res_PAtrend$trend,
-            res_TAtrend$trend,
-            res_ETPAtrend$trend
+            res_PAtrend$a,
+            res_TAtrend$a,
+            res_ETPAtrend$a
         ),
         var=var_climate,
         type=type_climate,
