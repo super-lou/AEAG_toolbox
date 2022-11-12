@@ -61,7 +61,6 @@ if ('station_serie_plot' %in% to_do) {
                  df_data=list(df_data,
                               df_sqrt),
                  var=list('Q', 'sqrt(Q)'),
-                 type=list('data', 'data'),
                  event=list('chronique', 'chronique'),
                  unit=list('m^{3}.s^{-1}', 'm^{3/2}.s^{-1/2}'),
                  axis_xlim=axis_xlim,
@@ -79,7 +78,6 @@ if ('station_trend_plot' %in% to_do) {
                  df_data=df_data_analyse,
                  df_trend=df_trend_analyse,
                  var=var_analyse,
-                 type=type_analyse,
                  event=event_analyse,
                  unit=unit_analyse,
                  samplePeriod=samplePeriod_analyse,
@@ -136,7 +134,6 @@ if ('climate_trend_plot' %in% to_do) {
             res_ETPAtrend$a
         ),
         var=var_climate,
-        type=type_climate,
         event=event_climate,
         unit=unit_climate,
         glose=glose_climate,

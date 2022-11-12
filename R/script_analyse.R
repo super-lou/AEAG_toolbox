@@ -55,7 +55,6 @@ if ('station_trend_analyse' %in% to_do) {
     names(structure) = event_to_analyse
     
     var_analyse = c()
-    type_analyse = c()
     event_analyse = c()
     unit_analyse = c()
     samplePeriod_analyse = list()
@@ -76,8 +75,13 @@ if ('station_trend_analyse' %in% to_do) {
 
             source(file.path('R', var_dir, init_var_file),
                    encoding='UTF-8')
-            source(file.path('R', var_dir, init_tools_file),
-                   encoding='UTF-8')
+            list_path = list.files(file.path('R', var_dir,
+                                             init_tools_dir),
+                                   pattern='*.R$',
+                                   full.names=TRUE)
+            for (path in list_path) {
+                source(path, encoding='UTF-8')    
+            }
             source(file.path(script_to_analyse_dirpath, script),
                    encoding='UTF-8')
             split_script = split_path(script)
@@ -123,7 +127,6 @@ if ('station_trend_analyse' %in% to_do) {
             }
             
             var_analyse = c(var_analyse, var)
-            type_analyse = c(type_analyse, type)
             event_analyse = c(event_analyse, event)
             unit_analyse = c(unit_analyse, unit)
             samplePeriod_analyse = append(samplePeriod_analyse,
@@ -223,7 +226,9 @@ if ('station_trend_analyse' %in% to_do) {
                                  functYT_ext_args=functYT_ext_args,
                                  isDateYT_ext=isDateYT_ext,
                                  functYT_sum=functYT_sum,
-                                 functYT_sum_args=functYT_sum_args)
+                                 functYT_sum_args=functYT_sum_args,
+                                 funct_sum=funct_sum,
+                                 funct_sum_args=funct_sum_args)
 
                 df_Xdata = res$data
                 df_Xmod = res$mod
@@ -335,11 +340,6 @@ if ('climate_trend_analyse' %in% to_do) {
         'TA',
         'ETPA'
     )
-    type_all_climate = list(
-        'pluviométrie',
-        'température',
-        'évapotranspiration'
-    )
     glose_all_climate = list(
         '',
         '',
@@ -348,12 +348,10 @@ if ('climate_trend_analyse' %in% to_do) {
 
 ### 3.2. Selection of variables ______________________________________
     var_climate = c()
-    type_climate = c()
     glose_climate = c()
     for (OkVar in to_analyse_climate) {
         Ok = var_all_climate == OkVar
         var_climate = c(var_climate, var_all_climate[Ok])
-        type_climate = c(type_climate, type_all_climate[Ok])
         glose_climate = c(glose_climate, glose_all_climate[Ok])
     } 
     

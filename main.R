@@ -85,9 +85,9 @@ filename =
         # 'S2235610_HYDRO_QJM.txt',
         # 'O1484320_HYDRO_QJM.txt'
         # 'O0362510_HYDRO_QJM.txt'
-        'A3301010_HYDRO_QJM.txt'
+        # 'A3301010_HYDRO_QJM.txt'
         # 'J5704810_HYDRO_QJM.txt'
-        # '^[A]'
+        '^[A]'
     )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
@@ -128,9 +128,9 @@ filename =
 # - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
-        # 'station_extraction',
-        # 'station_trend_analyse',
-        'station_trend_plot'
+        'station_extraction',
+        'station_trend_analyse'
+        # 'station_trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
@@ -274,12 +274,13 @@ df_flag = data.frame(
 ## 4. ANALYSED VARIABLES _____________________________________________
 ### 4.1. Hydrological variables ______________________________________
 # Name of the directory that regroups all variables information
-var_dir = 'variable'
-# Name of the default parameters file for a variable
-init_var_file = 'default.R'
-# Name of the tool file that includes all the functions needed to
+var_dir = 'variables'
+# Name of the tool directory that includes all the functions needed to
 # calculate a variable
-init_tools_file = 'tools.R'
+init_tools_dir = '__tools__'
+# Name of the default parameters file for a variable
+init_var_file = '__default__.R'
+
 
 # Name of the subdirectory in 'var_dir' that includes variables to
 # analyse. If no subdirectory is selected, all variable files will be
@@ -295,9 +296,9 @@ init_tools_file = 'tools.R'
 #   event group.
 var_to_analyse_dir =
     # ''
-    # 'AEAG_selection'
-    # 'MAKAHO'
-    'wip'
+    # 'AEAG'
+    'MAKAHO'
+    # 'WIP'
 
 ### 4.2. Climate variables ___________________________________________
 to_analyse_climate = c(
@@ -388,8 +389,8 @@ fast_format = TRUE
 # be save for each station. Otherwise, if you choose 'all', every
 # figure will be saved as one pdf.
 pdf_chunk =
-    # 'by_code'
-    'all'
+    'by_code'
+    # 'all'
 
 
 ## 7. PLOTTING PARAMETERS ____________________________________________
@@ -402,7 +403,7 @@ pdf_chunk =
 to_plot_station =
     c(
         # 'summary',
-        'datasheet'
+        # 'datasheet'
         # 'table'
         # 'map'
         # 'map_regime'
