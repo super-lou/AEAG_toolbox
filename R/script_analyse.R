@@ -210,6 +210,7 @@ if ('station_trend_analyse' %in% to_do) {
                 res = get_Xtrend(var,
                                  df_data_missing,# df_meta_missing,
                                  period=trend_period,
+                                 level=level,
                                  df_flag=df_flag,
                                  NApct_lim=NApct_lim,
                                  NAyear_lim=NAyear_lim,
@@ -218,6 +219,12 @@ if ('station_trend_analyse' %in% to_do) {
                                  functM_args=functM_args,
                                  isDateM=isDateM,
                                  samplePeriodM=samplePeriodM,
+                                 isAlongYearM=isAlongYearM,
+                                 functS=functS,
+                                 functS_args=functS_args,
+                                 isDateS=isDateS,
+                                 samplePeriodS=samplePeriodS,
+                                 isAlongYearS=isAlongYearS,
                                  functY=functY,
                                  functY_args=functY_args,
                                  isDateY=isDateY,
@@ -227,8 +234,8 @@ if ('station_trend_analyse' %in% to_do) {
                                  isDateYT_ext=isDateYT_ext,
                                  functYT_sum=functYT_sum,
                                  functYT_sum_args=functYT_sum_args,
-                                 funct_sum=funct_sum,
-                                 funct_sum_args=funct_sum_args)
+                                 functG=functG,
+                                 functG_args=functG_args)
 
                 df_Xdata = res$data
                 df_Xmod = res$mod
@@ -325,7 +332,7 @@ if ('station_break_analyse' %in% to_do) {
         # Gets the trend results for the variable
         res_trend = get(paste('res_', v, 'trend', sep=''))
         # Performs the break analyses for some hydrological variables
-        df_break = get_break(res_trend$data, df_meta, alpha=0.1)
+        df_break = get_break(res_trend$data, df_meta, level=0.1)
         DF_BREAK = append(DF_BREAK, list(df_break))
     }
     names(DF_BREAK) = var
@@ -373,7 +380,7 @@ if ('climate_trend_analyse' %in% to_do) {
     res = get_Xtrend(df_data_P, df_climate_meta,
                       period=trend_period,
                       hydroYear='09-01',
-                      alpha=alpha,
+                      level=level,
                       dayLac_lim=dayLac_lim,
                       yearNA_lim=yearNA_lim,
                       df_flag=df_flag,
@@ -386,7 +393,7 @@ if ('climate_trend_analyse' %in% to_do) {
     res = get_Xtrend(df_data_T, df_climate_meta,
                       period=trend_period,
                       hydroYear='09-01',
-                      alpha=alpha,
+                      level=level,
                       dayLac_lim=dayLac_lim,
                       yearNA_lim=yearNA_lim,
                       df_flag=df_flag,
@@ -400,7 +407,7 @@ if ('climate_trend_analyse' %in% to_do) {
     res = get_Xtrend(df_data_ETP, df_climate_meta,
                       period=trend_period,
                       hydroYear='09-01',
-                      alpha=alpha,
+                      level=level,
                       dayLac_lim=dayLac_lim,
                       yearNA_lim=yearNA_lim,
                       df_flag=df_flag,

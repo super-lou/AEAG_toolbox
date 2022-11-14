@@ -9,6 +9,7 @@ NApct_lim = 3
 functM = mean
 functM_args = list(na.rm=TRUE)
 hydroPeriodM = NULL
+isAlongYearM = TRUE
 
 functY = minNA
 functY_args = list(na.rm=TRUE)

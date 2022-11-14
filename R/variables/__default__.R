@@ -11,6 +11,13 @@ functM = NULL
 functM_args = NULL
 isDateM = FALSE
 samplePeriodM = NULL
+isAlongYearM = TRUE
+
+functS = NULL
+functS_args = NULL
+isDateS = FALSE
+samplePeriodS = NULL
+isAlongYearS = TRUE
 
 functY = NULL
 functY_args = NULL

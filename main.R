@@ -310,7 +310,7 @@ to_analyse_climate = c(
 
 ## 5. STATISTICAL OPTIONS ____________________________________________
 # The risk of the Mann-Kendall trend detection test
-alpha = 0.1
+level = 0.1
 
 # Mode of selection of the hydrological period. Options are : 
 # - 'every' : Each month will be use one by one as a start of the
