@@ -59,7 +59,7 @@ if ('station_trend_analyse' %in% to_do) {
     unit_analyse = c()
     samplePeriod_analyse = list()
     glose_analyse = c()
-    df_data_analyse = list()
+    data_analyse = list()
     df_trend_analyse = list()
     
 ### 1.3. Trend analyses ______________________________________________
@@ -73,8 +73,6 @@ if ('station_trend_analyse' %in% to_do) {
             
         for (iHY in 1:nSamplePeriod) {
 
-            source(file.path('R', var_dir, init_var_file),
-                   encoding='UTF-8')
             list_path = list.files(file.path('R', var_dir,
                                              init_tools_dir),
                                    pattern='*.R$',
@@ -82,8 +80,14 @@ if ('station_trend_analyse' %in% to_do) {
             for (path in list_path) {
                 source(path, encoding='UTF-8')    
             }
-            source(file.path(script_to_analyse_dirpath, script),
-                   encoding='UTF-8')
+
+            Process_default = sourceProcess(
+                file.path('R', var_dir,init_var_file))
+            
+            Process = sourceProcess(
+                file.path(script_to_analyse_dirpath, script),
+                default=Process_default)
+
             split_script = split_path(script)
             
             if (length(split_script) == 1) {
@@ -204,38 +208,46 @@ if ('station_trend_analyse' %in% to_do) {
 
 
             if (!is.null(missingCode)) {
-                df_data_missing = df_data[df_data$Code %in% missingCode,]
+                data_missing = data[data$Code %in% missingCode,]
                 df_meta_missing = df_meta[df_meta$Code %in% missingCode,]
-                
-                res = get_Xtrend(var,
-                                 df_data_missing,# df_meta_missing,
+
+
+
+                res = get_Xtrend(data=data_missing,
                                  period=trend_period,
                                  level=level,
                                  df_flag=df_flag,
-                                 NApct_lim=NApct_lim,
-                                 NAyear_lim=NAyear_lim,
-                                 day_to_roll=day_to_roll,
-                                 functM=functM,
-                                 functM_args=functM_args,
-                                 isDateM=isDateM,
-                                 samplePeriodM=samplePeriodM,
-                                 isAlongYearM=isAlongYearM,
-                                 functS=functS,
-                                 functS_args=functS_args,
-                                 isDateS=isDateS,
-                                 samplePeriodS=samplePeriodS,
-                                 isAlongYearS=isAlongYearS,
-                                 functY=functY,
-                                 functY_args=functY_args,
-                                 isDateY=isDateY,
-                                 samplePeriodY=samplePeriodY,
-                                 functYT_ext=functYT_ext,
-                                 functYT_ext_args=functYT_ext_args,
-                                 isDateYT_ext=isDateYT_ext,
-                                 functYT_sum=functYT_sum,
-                                 functYT_sum_args=functYT_sum_args,
-                                 functG=functG,
-                                 functG_args=functG_args)
+                                 Process)
+                
+                # res = get_Xtrend(var,
+                #                  data_missing,# df_meta_missing,
+                #                  period=trend_period,
+                #                  level=level,
+                #                  df_flag=df_flag,
+                #                  NApct_lim=NApct_lim,
+                #                  NAyear_lim=NAyear_lim,
+                #                  day_to_roll=day_to_roll,
+                #                  functM=functM,
+                #                  functM_args=functM_args,
+                #                  isDateM=isDateM,
+                #                  samplePeriodM=samplePeriodM,
+                #                  isAlongYearM=isAlongYearM,
+                #                  functS=functS,
+                #                  functS_args=functS_args,
+                #                  isDateS=isDateS,
+                #                  samplePeriodS=samplePeriodS,
+                #                  isAlongYearS=isAlongYearS,
+                #                  functY=functY,
+                #                  functY_args=functY_args,
+                #                  isDateY=isDateY,
+                #                  samplePeriodY=samplePeriodY,
+                #                  functYT_ext=functYT_ext,
+                #                  functYT_ext_args=functYT_ext_args,
+                #                  isDateYT_ext=isDateYT_ext,
+                #                  functYT_sum=functYT_sum,
+                #                  functYT_sum_args=functYT_sum_args,
+                #                  functG=functG,
+                #                  functG_args=functG_args)
 
                 df_Xdata = res$data
                 df_Xmod = res$mod
@@ -277,7 +289,7 @@ if ('station_trend_analyse' %in% to_do) {
             }
 
             if ('station_trend_plot' %in% to_do | is.null(saving)) {
-                df_data_analyse = append(df_data_analyse, list(df_XEx))
+                data_analyse = append(data_analyse, list(df_XEx))
                 df_trend_analyse = append(df_trend_analyse, list(df_Xtrend))
             }
 
@@ -364,20 +376,20 @@ if ('climate_trend_analyse' %in% to_do) {
     
 ### 3.3. Formatting of climate dataframe _____________________________
     # For precipitation
-    df_data_P = bind_cols(Date=df_climate_data$Date,
+    data_P = bind_cols(Date=df_climate_data$Date,
                           Value=df_climate_data$PRCP_mm,
                           code=df_climate_data$Code)
     # For temperature
-    df_data_T = bind_cols(Date=df_climate_data$Date,
+    data_T = bind_cols(Date=df_climate_data$Date,
                           Value=df_climate_data$T_degC,
                           code=df_climate_data$Code)
     # For evapotranspiration
-    df_data_ETP = bind_cols(Date=df_climate_data$Date,
+    data_ETP = bind_cols(Date=df_climate_data$Date,
                             Value=df_climate_data$PET_mm,
                             code=df_climate_data$Code)
 ### 3.4. Trend analyses ______________________________________________
     # TA trend
-    res = get_Xtrend(df_data_P, df_climate_meta,
+    res = get_Xtrend(data_P, df_climate_meta,
                       period=trend_period,
                       hydroYear='09-01',
                       level=level,
@@ -390,7 +402,7 @@ if ('climate_trend_analyse' %in% to_do) {
     res_PAtrend = res$analyse
     
     # PA trend
-    res = get_Xtrend(df_data_T, df_climate_meta,
+    res = get_Xtrend(data_T, df_climate_meta,
                       period=trend_period,
                       hydroYear='09-01',
                       level=level,
@@ -404,7 +416,7 @@ if ('climate_trend_analyse' %in% to_do) {
     res_TAtrend = res$analyse
 
     # ETPA trend
-    res = get_Xtrend(df_data_ETP, df_climate_meta,
+    res = get_Xtrend(data_ETP, df_climate_meta,
                       period=trend_period,
                       hydroYear='09-01',
                       level=level,

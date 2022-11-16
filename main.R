@@ -68,8 +68,8 @@ computer_work_path =
 # ash\\data\\.
 filedir =
     # ''
-    # 'AEAG_selection'
-    'RRSE'
+    'AEAG_selection'
+    # 'RRSE'
 
 # Name of the files that will be analysed from the data directory
 # (if 'all', all the file of the directory will be chosen)
@@ -84,10 +84,10 @@ filename =
         # 'O3314010_HYDRO_QJM.txt'
         # 'S2235610_HYDRO_QJM.txt',
         # 'O1484320_HYDRO_QJM.txt'
-        # 'O0362510_HYDRO_QJM.txt'
+        'O0362510_HYDRO_QJM.txt'
         # 'A3301010_HYDRO_QJM.txt'
         # 'J5704810_HYDRO_QJM.txt'
-        '^[A]'
+        # '^[A]'
     )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
@@ -103,12 +103,12 @@ filename =
 #
 # - 'station_extraction' : Extraction of data and meta data tibbles
 #                          about stations
-#                          > 'df_data' 
+#                          > 'data' 
 #                          > 'df_meta'
 #
 # - 'climate_extraction' : Extraction of data and metadata tibbles
 #                          about climate data
-#                          > 'df_data' 
+#                          > 'data' 
 #                          > 'df_meta'
 #
 # - 'station_trend_analyse' : Trend analyses of stations data
@@ -297,8 +297,8 @@ init_var_file = '__default__.R'
 var_to_analyse_dir =
     # ''
     # 'AEAG'
-    'MAKAHO'
-    # 'WIP'
+    # 'MAKAHO'
+    'WIP'
 
 ### 4.2. Climate variables ___________________________________________
 to_analyse_climate = c(
@@ -372,7 +372,7 @@ to_assign_out = c(
 # It is possible to save the data under txt files.
 # Options are :
 # - 'meta' : saves 'df_meta' the data frame of meta informations
-# - 'modified_data' : saves modified 'df_data' data frame that take
+# - 'modified_data' : saves modified 'data' data frame that take
 #   corrections into account
 # - 'analyse' : saves results of the trend analyse
 saving = c(
@@ -525,6 +525,7 @@ library(latex2exp)
 library(StatsAnalysisTrend)
 library(officer)
 library(sf)
+library(stringr)
 # already ::
 # library(rgeos)
 # library(lubridate)
