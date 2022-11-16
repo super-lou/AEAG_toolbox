@@ -35,7 +35,7 @@
 ## 1. STATION TREND ANALYSIS _________________________________________
 if ('station_trend_analyse' %in% to_do) {
 
-    script_to_analyse_dirpath = file.path('R', var_dir, var_to_analyse_dir)
+    script_to_analyse_dirpath = file.path('Rtools', var_dir, var_to_analyse_dir)
     
     script_to_analyse = list.files(script_to_analyse_dirpath,
                                    pattern=".R$",
@@ -73,7 +73,7 @@ if ('station_trend_analyse' %in% to_do) {
             
         for (iHY in 1:nSamplePeriod) {
 
-            list_path = list.files(file.path('R', var_dir,
+            list_path = list.files(file.path('Rtools', var_dir,
                                              init_tools_dir),
                                    pattern='*.R$',
                                    full.names=TRUE)
@@ -82,11 +82,17 @@ if ('station_trend_analyse' %in% to_do) {
             }
 
             Process_default = sourceProcess(
-                file.path('R', var_dir,init_var_file))
+                file.path('Rtools', var_dir,init_var_file))
             
             Process = sourceProcess(
                 file.path(script_to_analyse_dirpath, script),
                 default=Process_default)
+
+            principal = Process$P
+            principal_names = names(principal)
+            for (i in 1:length(principal)) {
+                assign(principal_names[i], principal[[i]])
+            }            
 
             split_script = split_path(script)
             
@@ -107,19 +113,19 @@ if ('station_trend_analyse' %in% to_do) {
                 
             } else if (samplePeriodY_mode == 'optimale') {
                 if (identical(samplePeriodY_opti[[event]], "min")) {
-                    Value = paste0(formatC(df_meta$minQM,
+                    Q = paste0(formatC(df_meta$minQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
                     samplePeriodY = tibble(Code=df_meta$Code,
-                                         Value=Value)
+                                         Q=Q)
                 } else if (identical(samplePeriodY_opti[[event]], "max")) {
-                    Value = paste0(formatC(df_meta$maxQM,
+                    Q = paste0(formatC(df_meta$maxQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
                     samplePeriodY = tibble(Code=df_meta$Code,
-                                         Value=Value)
+                                         Q=Q)
                 } else {
                     samplePeriodY = samplePeriodY_opti[[event]]
                 }
@@ -210,8 +216,6 @@ if ('station_trend_analyse' %in% to_do) {
             if (!is.null(missingCode)) {
                 data_missing = data[data$Code %in% missingCode,]
                 df_meta_missing = df_meta[df_meta$Code %in% missingCode,]
-
-
 
                 res = get_Xtrend(data=data_missing,
                                  period=trend_period,
@@ -377,15 +381,15 @@ if ('climate_trend_analyse' %in% to_do) {
 ### 3.3. Formatting of climate dataframe _____________________________
     # For precipitation
     data_P = bind_cols(Date=df_climate_data$Date,
-                          Value=df_climate_data$PRCP_mm,
+                          Q=df_climate_data$PRCP_mm,
                           code=df_climate_data$Code)
     # For temperature
     data_T = bind_cols(Date=df_climate_data$Date,
-                          Value=df_climate_data$T_degC,
+                          Q=df_climate_data$T_degC,
                           code=df_climate_data$Code)
     # For evapotranspiration
     data_ETP = bind_cols(Date=df_climate_data$Date,
-                            Value=df_climate_data$PET_mm,
+                            Q=df_climate_data$PET_mm,
                             code=df_climate_data$Code)
 ### 3.4. Trend analyses ______________________________________________
     # TA trend

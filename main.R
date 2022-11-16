@@ -263,7 +263,7 @@ df_flag = data.frame(
            '1950-07-20',
            '1953-07-22'
            ),
-    newValue=c(9.5,
+    newQ=c(9.5,
                4,
                3,
                1,
@@ -560,20 +560,20 @@ input_trend_period = sapply(trend_period, paste, collapse='/')
 ## 1. EXTRACTION _____________________________________________________
 if ('station_extraction' %in% to_do | 'climate_extraction' %in% to_do) {
     print('EXTRACTION')
-    source(file.path('R', 'script_extract.R'),
+    source(file.path('Rtools', 'script_extract.R'),
            encoding='UTF-8')
 }
 
 ## 2. ANALYSES _______________________________________________________
 if ('station_trend_analyse' %in% to_do | 'station_break_analyse' %in% to_do | 'climate_trend_analyse' %in% to_do) {
     print('ANALYSES')
-    source(file.path('R', 'script_analyse.R'),
+    source(file.path('Rtools', 'script_analyse.R'),
            encoding='UTF-8')
 }
 
 ## 3. PLOTTING _______________________________________________________
 if ('station_serie_plot' %in% to_do | 'station_trend_plot' %in% to_do | 'station_break_plot' %in% to_do | 'climate_trend_plot' %in% to_do) {
     print('PLOTTING')
-    source(file.path('R', 'script_layout.R'),
+    source(file.path('Rtools', 'script_layout.R'),
            encoding='UTF-8')
 }

@@ -1,11 +1,13 @@
-var = "tQJXA"
-unit = "jour de l'année"
-glose = "Date du maximum annuel du débit journalier"
-event = "Crue"
+ASHES$P.var = "tQJXA"
+ASHES$P.unit = "jour de l'année"
+ASHES$P.glose = "Date du maximum annuel du débit journalier"
+ASHES$P.event = "Crue"
 
-NAyear_lim = 10
-NApct_lim = 3
-
-functY = which.maxNA
-isDateY = TRUE
-samplePeriodY = "09-01"
+ASHES$P1.funct = list(X=which.maxNA)
+ASHES$P1.funct_args = list("Q")
+ASHES$P1.timeStep = "year"
+ASHES$P1.samplePeriod = '09-01'
+ASHES$P1.isDate = TRUE
+ASHES$P1.NApct_lim = 3
+ASHES$P1.NAyear_lim = 10
+ASHES$P1.rmNApct = FALSE

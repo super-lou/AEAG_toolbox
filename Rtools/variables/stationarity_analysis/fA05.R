@@ -1,14 +1,19 @@
-var = "fA05"
-unit = "jour.an^{-1}"
-glose = "Fréquence annuelle de dépassement (Q > Q05)"
-event = "Crue"
+ASHES$P.var = "fA05"
+ASHES$P.unit = "jour.an^{-1}"
+ASHES$P.glose = "Fréquence annuelle de dépassement (Q > Q05)"
+ASHES$P.event = "Crue"
 
-NAyear_lim = 10
-NApct_lim = 3
+ASHES$P1.funct = list(lowLim=compute_Qp)
+ASHES$P1.funct_args = list("Q", p=0.05)
+ASHES$P1.timeStep = "none"
+ASHES$P1.NApct_lim = 3
+ASHES$P1.NAyear_lim = 10
+ASHES$P1.keep = TRUE
 
-functY = compute_fAp
-functY_args = list(lowLim='*threshold*')
-samplePeriodY = "09-01"
-
-functYT_sum = compute_Qp
-functYT_sum_args = list(p=0.05)
+ASHES$P2.funct = list(X=compute_fAp)
+ASHES$P2.funct_args = list("Q", lowLim="lowLim")
+ASHES$P2.timeStep = "year"
+ASHES$P2.samplePeriod = "09-01"
+ASHES$P2.NApct_lim = 3
+ASHES$P2.NAyear_lim = 10
+ASHES$P2.rmNApct = FALSE
