@@ -8,7 +8,7 @@ ASHES$P1.funct_args = list("Q", k=10)
 ASHES$P1.timeStep = "none"
 ASHES$P1.keep = TRUE
 
-ASHES$P2.funct = list(Qmim=minNA)
+ASHES$P2.funct = list(Qmin=minNA)
 ASHES$P2.funct_args = list("Q", na.rm=TRUE)
 ASHES$P2.timeStep = "year"
 ASHES$P2.samplePeriod = c('05-01', '11-30')
