@@ -6,6 +6,7 @@ ASHES$P.event = "Étiage"
 ASHES$P1.funct = list(Q=rollmean_center)
 ASHES$P1.funct_args = list("Q", k=10)
 ASHES$P1.timeStep = "none"
+ASHES$P1.keep = TRUE
 
 ASHES$P2.funct = list(X=minNA)
 ASHES$P2.funct_args = list("Q", na.rm=TRUE)
