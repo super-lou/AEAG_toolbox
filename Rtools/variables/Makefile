@@ -1,23 +1,9 @@
 # build directory of ASHES R variables
 
-source_dir='stationarity_analysis'
-AEAG='QA QMNA VCN10 tDEB_etiage tCEN_etiage'
-
 AEAG:
-	@R -e \
-	"\
-	dir = 'AEAG';\
-	if (!(file.exists(dir))) {;\
-	dir.create(dir);\
-	};\
-	IN = ${AEAG};\
-	IN = unlist(strsplit(IN, split=' '));\
-	IN = paste0(IN, '.R');\
-	n = length(IN);\
-	OUT = paste0(1:n, '_', IN);\
-	for (i in 1:n) {;\
-	file.copy(file.path(${source_dir}, IN[i]), file.path(dir, OUT[i]));\
-	};\
-	"
+	./manage_variables.R -d AEAG [ QA QMNA VCN10 tDEB_etiage tCEN_etiage ]
 
-.PHONY: AEAG
+MAKAHO:
+	./manage_variables.R -d MAKAHO [ Resume [ ] Crue [ ] Crue_Nivale | Moyennes_Eaux | Étiage -V + QJXA QA VCN10 | QJXA tQJXA fA10 fA05 fA01 | t_BF v_BF tDEB_BF tCEN_BF tFIN_BF | Q10 Q25 Q50 Q75 Q90 QA | QNA QMNA VCN10 t_etiage vDEF_etiage tDEB_etiage tCEN_etiage tFIN_etiage -w
+
+.PHONY: AEAG MAKAHO
