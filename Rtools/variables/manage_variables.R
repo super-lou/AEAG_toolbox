@@ -5,16 +5,17 @@ suppressPackageStartupMessages(library(argparse))
 
 parser = ArgumentParser()
 
-parser$add_argument('-d', '--directory', type="character",
+parser$add_argument('-l', '--layout', nargs='+', type="character",
                     default="",
-                    help="Directory where variables will be paste.")
-parser$add_argument('-V', '--variables', nargs='+', type="character",
-                    default="",
-                    help="Name of the chose variables.")
+                    help="Layout of the chosen variables.")
+parser$add_argument("-w", "--white", action="store_true", default=TRUE,
+                    help="Underscores in directory names are replace by white spaces")
 parser$add_argument("-v", "--verbose", action="store_true", default=TRUE,
                     help="Print information")
 
 args = parser$parse_args()
+
+# args$l = "MAKAHO [ Resume [ QJXA QA VCN10 ] Crue [ QJXA tQJXA fA10 fA05 fA01 ] Crue_Nivale [ t_BF v_BF tDEB_BF tCEN_BF tFIN_BF ] Moyennes_Eaux [ Q10 Q25 Q50 Q75 Q90 QA ] Étiage [ QNA QMNA VCN10 t_etiage vDEF_etiage tDEB_etiage tCEN_etiage tFIN_etiage ] ]"
 
 # Display the current parameters selected with argparse.
 # parameters: 
@@ -36,29 +37,106 @@ remind = function (args) {
 if (args$verbose) {
     remind(args)
 }
-if (args$directory == "") {
-    write("Error : --directory is void\n", stderr())
-    stop ()
-}
-if (all(args$variables == "")) {
-    write("Error : --variables is void\n", stderr())
+if (all(args$l == "")) {
+    write("Error : --layout is void\n", stderr())
     stop ()
 }
 
 source_dir = "__all__"
 
-if (!(file.exists(args$directory))) {
-    dir.create(args$directory)
+# print(args$l)
+
+OUT = unlist(args$l)
+nOUT = length(OUT)
+test1 = "[[]|[(]|[{]|[]]|[)]|[}]"
+test2 = "[[]|[(]|[{]"
+for (i in 1:nOUT) {
+    if (i < nOUT & !grepl(test1, OUT[i]) & !grepl(test2, OUT[(i+1)])) {
+        OUT[i] = paste0(OUT[i], ".(NA)")
+    }
+    if (i == nOUT & !grepl(test1, OUT[(i)])) {
+        OUT[i] = paste0(OUT[i], ".(NA)")
+    }
 }
-IN = args$variables
-IN = paste0(unlist(IN), '.R')
-n = length(IN)
-OUT = paste0(1:n, '_', IN)
+OUT = unlist(sapply(OUT, strsplit, split="[.]"),
+            use.names=FALSE)
+
+OUT = paste0(OUT, collapse="','")
+OUT = gsub("[]]|[}]", ")", OUT)
+OUT = gsub("[[]|[{]|[(]", "=list(", OUT)
+OUT = gsub("[,]['][=]", "=", OUT)
+OUT = gsub("[(]['][,]", "(", OUT)
+OUT = gsub("[,]['][)]", ")", OUT)
+OUT = gsub("[)][']", ")", OUT)
+OUT = paste0("'", OUT)
+OUT = paste0("list(", OUT, ")")
+OUT = eval(parse(text=OUT))
+OUT = unlist(OUT)
+OUT = names(OUT)
+OUT = gsub("[.]", "/", OUT)
+OUT = paste0(OUT, ".R")
+
+n = length(OUT)
+SUB = c()
+save = c()
+IN = c()
+DIR = c()
 for (i in 1:n) {
-    file.copy(file.path(source_dir, IN[i]),
-              file.path(args$directory, OUT[i]))
+    path = unlist(strsplit(OUT[i], "/"))
+    len = length(path)
+    nsd = len - 2
+
+    if (nsd < 0) {
+        write("Error : No directory detect\n", stderr())
+        stop ()
+        
+    } else if (nsd == 0) {
+        id = i
+    
+    } else if (nsd > 0) {
+
+        for (j in 1:nsd) {
+            
+            if (!(path[(j+1)] %in% save)) {
+                if (length(SUB) >= nsd) {
+                    SUB[nsd] = SUB[nsd] + 1
+                } else {
+                    SUB = c(SUB, 1)
+                }
+                id = 1
+                save = c(save, path[(j+1)])
+            }
+
+            obj = path[(j+1)]
+            if (args$w) {
+               obj = gsub("[_]", " ", obj)
+            }
+            
+            path[(j+1)] = paste0(SUB[nsd], "_", obj)
+        }
+    }
+    IN = c(IN, path[len])
+    DIR = c(DIR, do.call(file.path, as.list(path[-len])))
+    path[len] = paste0(id, "_", path[len])
+    id = id + 1
+    OUT[i] = do.call(file.path, as.list(path))
+}
+
+DIR = DIR[!duplicated(DIR)]
+
+if (any(file.exists(DIR))) {
+    unlink(DIR, recursive=TRUE, force=TRUE)
+}
+
+for (i in 1:n) {
+    dir.create(DIR[i], recursive=TRUE)
+}
+
+for (i in 1:n) {
+    file.copy(file.path(source_dir, IN[i]), OUT[i])
 }
 
 if (args$verbose) {
     write("done", stdout())
 }
+warnings()
