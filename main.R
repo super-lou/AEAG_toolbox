@@ -80,10 +80,10 @@ filename =
         # 'X0500010_HYDRO_QJM.txt'
         # 'Q0214010_HYDRO_QJM.txt',
         # 'H7833520_HYDRO_QJM.txt',
-        # 'O0384010_HYDRO_QJM.txt',
-        # 'O3314010_HYDRO_QJM.txt'
+        'O0384010_HYDRO_QJM.txt',
+        'O3314010_HYDRO_QJM.txt',
         # 'S2235610_HYDRO_QJM.txt',
-        # 'O1484320_HYDRO_QJM.txt'
+        'O1484320_HYDRO_QJM.txt',
         'O0362510_HYDRO_QJM.txt'
         # 'A3301010_HYDRO_QJM.txt'
         # 'J5704810_HYDRO_QJM.txt'
@@ -319,7 +319,7 @@ level = 0.1
 #             noted in the variable file in 'var_dir'
 # - 'optimale' : Hydrological period is determined for each station by
 #                following rules listed in the next variable.
-samplePeriodY_mode =
+samplePeriod_mode =
     # 'every'
     # 'fixed'
     'optimale'
@@ -335,7 +335,7 @@ samplePeriodY_mode =
 #   the beginning of the hydrological year.
 # - A vector of two months and day to select a beginning and an end of
 #   the hydrological year.
-samplePeriodY_opti = list(
+samplePeriod_opti = list(
     'Crue' = 'min',
     'Crue Nivale' = '09-01',
     'Moyennes Eaux' = 'min',
@@ -560,20 +560,17 @@ input_trend_period = sapply(trend_period, paste, collapse='/')
 ## 1. EXTRACTION _____________________________________________________
 if ('station_extraction' %in% to_do | 'climate_extraction' %in% to_do) {
     print('EXTRACTION')
-    source(file.path('Rtools', 'script_extract.R'),
-           encoding='UTF-8')
+    source('script_extract.R', encoding='UTF-8')
 }
 
 ## 2. ANALYSES _______________________________________________________
 if ('station_trend_analyse' %in% to_do | 'station_break_analyse' %in% to_do | 'climate_trend_analyse' %in% to_do) {
     print('ANALYSES')
-    source(file.path('Rtools', 'script_analyse.R'),
-           encoding='UTF-8')
+    source('script_analyse.R', encoding='UTF-8')
 }
 
 ## 3. PLOTTING _______________________________________________________
 if ('station_serie_plot' %in% to_do | 'station_trend_plot' %in% to_do | 'station_break_plot' %in% to_do | 'climate_trend_plot' %in% to_do) {
     print('PLOTTING')
-    source(file.path('Rtools', 'script_layout.R'),
-           encoding='UTF-8')
+    source('script_layout.R', encoding='UTF-8')
 }

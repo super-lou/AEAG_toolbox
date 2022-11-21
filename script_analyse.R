@@ -35,7 +35,7 @@
 ## 1. STATION TREND ANALYSIS _________________________________________
 if ('station_trend_analyse' %in% to_do) {
 
-    script_to_analyse_dirpath = file.path('Rtools', var_dir, var_to_analyse_dir)
+    script_to_analyse_dirpath = file.path(var_dir, var_to_analyse_dir)
     
     script_to_analyse = list.files(script_to_analyse_dirpath,
                                    pattern=".R$",
@@ -65,7 +65,7 @@ if ('station_trend_analyse' %in% to_do) {
 ### 1.3. Trend analyses ______________________________________________
     for (script in script_to_analyse) {
 
-        if (samplePeriodY_mode == 'every') {
+        if (samplePeriod_mode == 'every') {
             nSamplePeriod = 12
         } else {
             nSamplePeriod = 1
@@ -73,7 +73,7 @@ if ('station_trend_analyse' %in% to_do) {
             
         for (iHY in 1:nSamplePeriod) {
 
-            list_path = list.files(file.path('Rtools', var_dir,
+            list_path = list.files(file.path(var_dir,
                                              init_tools_dir),
                                    pattern='*.R$',
                                    full.names=TRUE)
@@ -82,7 +82,7 @@ if ('station_trend_analyse' %in% to_do) {
             }
 
             Process_default = sourceProcess(
-                file.path('Rtools', var_dir,init_var_file))
+                file.path(var_dir,init_var_file))
             
             Process = sourceProcess(
                 file.path(script_to_analyse_dirpath, script),
@@ -92,7 +92,7 @@ if ('station_trend_analyse' %in% to_do) {
             principal_names = names(principal)
             for (i in 1:length(principal)) {
                 assign(principal_names[i], principal[[i]])
-            }            
+            }
 
             split_script = split_path(script)
             
@@ -107,30 +107,43 @@ if ('station_trend_analyse' %in% to_do) {
                 structure[[dir]] = c(structure[[dir]], var)
             }
             
-            if (samplePeriodY_mode == 'every') {
-                samplePeriodY = paste0(formatC(iHY, width=2, flag="0"),
+            if (samplePeriod_mode == 'every') {
+                samplePeriodMOD = paste0(formatC(iHY, width=2, flag="0"),
                                      '-01')
                 
-            } else if (samplePeriodY_mode == 'optimale') {
-                if (identical(samplePeriodY_opti[[event]], "min")) {
+            } else if (samplePeriod_mode == 'optimale') {
+                if (identical(samplePeriod_opti[[event]], "min")) {
                     Q = paste0(formatC(df_meta$minQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    samplePeriodY = tibble(Code=df_meta$Code,
+                    samplePeriodMOD = tibble(Code=df_meta$Code,
                                          Q=Q)
-                } else if (identical(samplePeriodY_opti[[event]], "max")) {
+                } else if (identical(samplePeriod_opti[[event]], "max")) {
                     Q = paste0(formatC(df_meta$maxQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
-                    samplePeriodY = tibble(Code=df_meta$Code,
+                    samplePeriodMOD = tibble(Code=df_meta$Code,
                                          Q=Q)
                 } else {
-                    samplePeriodY = samplePeriodY_opti[[event]]
+                    samplePeriodMOD = samplePeriod_opti[[event]]
+                }
+                
+            } else {
+                samplePeriodMOD = NULL
+            }
+
+            if (!is.null(samplePeriodMOD)) {
+                nProcess = length(Process)
+                for (i in 1:nProcess) {
+                    if (!is.null(Process[[i]]$samplePeriod)) {
+                        Process[[i]]$samplePeriod = samplePeriodMOD
+                    }
                 }
             }
-            monthSamplePeriod = substr(samplePeriodY[1], 1, 2)
+
+            monthSamplePeriod = substr(samplePeriod[1], 1, 2)
 
             if (var %in% var_analyse) {
                 next
@@ -140,7 +153,7 @@ if ('station_trend_analyse' %in% to_do) {
             event_analyse = c(event_analyse, event)
             unit_analyse = c(unit_analyse, unit)
             samplePeriod_analyse = append(samplePeriod_analyse,
-                                          list(samplePeriodY))
+                                          list(samplePeriod))
             glose_analyse = c(glose_analyse, glose)
 
             missingCode = c()
@@ -244,7 +257,7 @@ if ('station_trend_analyse' %in% to_do) {
                 #                  functY=functY,
                 #                  functY_args=functY_args,
                 #                  isDateY=isDateY,
-                #                  samplePeriodY=samplePeriodY,
+                #                  samplePeriod=samplePeriod,
                 #                  functYT_ext=functYT_ext,
                 #                  functYT_ext_args=functYT_ext_args,
                 #                  isDateYT_ext=isDateYT_ext,

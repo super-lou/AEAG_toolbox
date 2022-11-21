@@ -10,7 +10,9 @@ parser$add_argument('-l', '--layout', nargs='+', type="character",
                     help="Layout of the chosen variables.")
 parser$add_argument("-w", "--white", action="store_true", default=TRUE,
                     help="Underscores in directory names are replace by white spaces")
-parser$add_argument("-v", "--verbose", action="store_true", default=TRUE,
+parser$add_argument("-b", "--blank", action="store_true", default=FALSE,
+                    help="Remove id before variable names")
+parser$add_argument("-v", "--verbose", action="store_true", default=FALSE,
                     help="Print information")
 
 args = parser$parse_args()
@@ -43,8 +45,6 @@ if (all(args$l == "")) {
 }
 
 source_dir = "__all__"
-
-# print(args$l)
 
 OUT = unlist(args$l)
 nOUT = length(OUT)
@@ -111,13 +111,17 @@ for (i in 1:n) {
             if (args$w) {
                obj = gsub("[_]", " ", obj)
             }
-            
-            path[(j+1)] = paste0(SUB[nsd], "_", obj)
+
+            if (!args$blank) {
+                path[(j+1)] = paste0(SUB[nsd], "_", obj)
+            }
         }
     }
     IN = c(IN, path[len])
     DIR = c(DIR, do.call(file.path, as.list(path[-len])))
-    path[len] = paste0(id, "_", path[len])
+    if (!args$blank) {
+        path[len] = paste0(id, "_", path[len])
+    }
     id = id + 1
     OUT[i] = do.call(file.path, as.list(path))
 }

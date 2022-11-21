@@ -102,20 +102,23 @@ if ('station_extraction' %in% to_do) {
 
     # Get all different stations code
     Code = rle(data$Code)$value
+    print("a")
     
 ### 1.5. Add other info about stations _______________________________
     # Time gap
     df_meta = get_lacune(data, df_meta)
     # Hydrograph
-
+    print("b")
     if (!is.null(mean_period[[1]])) {
         period = mean_period[[1]]
     } else {
        period = trend_period[[1]] 
     }
+    print("c")
     df_meta = get_hydrograph(data, df_meta,
                              period=period)$meta
 }
+
 
 
 ## 2. EXTRACTION OF CLIMATE DATA______________________________________
