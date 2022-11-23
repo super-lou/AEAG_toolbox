@@ -109,23 +109,23 @@ if ('station_trend_analyse' %in% to_do) {
             
             if (samplePeriod_mode == 'every') {
                 samplePeriodMOD = paste0(formatC(iHY, width=2, flag="0"),
-                                     '-01')
+                                         '-01')
                 
             } else if (samplePeriod_mode == 'optimale') {
                 if (identical(samplePeriod_opti[[event]], "min")) {
-                    Q = paste0(formatC(df_meta$minQM,
+                    minQM = paste0(formatC(df_meta$minQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
                     samplePeriodMOD = tibble(Code=df_meta$Code,
-                                         Q=Q)
+                                             sp=minQM)
                 } else if (identical(samplePeriod_opti[[event]], "max")) {
-                    Q = paste0(formatC(df_meta$maxQM,
+                    maxQM = paste0(formatC(df_meta$maxQM,
                                            width=2,
                                            flag="0"),
                                    '-01')
                     samplePeriodMOD = tibble(Code=df_meta$Code,
-                                         Q=Q)
+                                             sp=maxQM)
                 } else {
                     samplePeriodMOD = samplePeriod_opti[[event]]
                 }
@@ -139,11 +139,12 @@ if ('station_trend_analyse' %in% to_do) {
                 for (i in 1:nProcess) {
                     if (!is.null(Process[[i]]$samplePeriod)) {
                         Process[[i]]$samplePeriod = samplePeriodMOD
+                        samplePeriod = Process[[i]]$samplePeriod
                     }
                 }
             }
 
-            monthSamplePeriod = substr(samplePeriod[1], 1, 2)
+            # monthSamplePeriod = substr(samplePeriod[1], 1, 2)
 
             if (var %in% var_analyse) {
                 next
@@ -158,7 +159,7 @@ if ('station_trend_analyse' %in% to_do) {
 
             missingCode = c()
             if (read_results) {
-                trend_path = file.path(trend_dir, var, monthSamplePeriod)
+                # trend_path = file.path(trend_dir, var, monthSamplePeriod)
                 isExtract = file.exists(file.path(resdir, trend_path,
                                                   'extract.txt'))
                 isEstimate = file.exists(file.path(resdir, trend_path,
@@ -236,35 +237,24 @@ if ('station_trend_analyse' %in% to_do) {
                                  df_flag=df_flag,
                                  Process)
                 
-                # res = get_Xtrend(var,
-                #                  data_missing,# df_meta_missing,
-                #                  period=trend_period,
-                #                  level=level,
-                #                  df_flag=df_flag,
-                #                  NApct_lim=NApct_lim,
-                #                  NAyear_lim=NAyear_lim,
-                #                  day_to_roll=day_to_roll,
-                #                  functM=functM,
-                #                  functM_args=functM_args,
-                #                  isDateM=isDateM,
-                #                  samplePeriodM=samplePeriodM,
-                #                  isAlongYearM=isAlongYearM,
-                #                  functS=functS,
-                #                  functS_args=functS_args,
-                #                  isDateS=isDateS,
-                #                  samplePeriodS=samplePeriodS,
-                #                  isAlongYearS=isAlongYearS,
-                #                  functY=functY,
-                #                  functY_args=functY_args,
-                #                  isDateY=isDateY,
-                #                  samplePeriod=samplePeriod,
-                #                  functYT_ext=functYT_ext,
-                #                  functYT_ext_args=functYT_ext_args,
-                #                  isDateYT_ext=isDateYT_ext,
-                #                  functYT_sum=functYT_sum,
-                #                  functYT_sum_args=functYT_sum_args,
-                #                  functG=functG,
-                #                  functG_args=functG_args)
+                # source("variables/__default_save__.R", encoding='UTF-8')
+                # source("variables/tDEB_etiage_save.R", encoding='UTF-8')
+                # df_XEx_save = get_dataEx_save(var,
+                #                       data_missing,
+                #                       period=trend_period,
+                #                       df_flag=df_flag,
+                #                       NApct_lim=NApct_lim,
+                #                       NAyear_lim=NAyear_lim,
+                #                       day_to_roll=day_to_roll,
+                #                       functY=functY,
+                #                       functY_args=functY_args,
+                #                       isDateY=isDateY,
+                #                       samplePeriodY=samplePeriod,
+                #                       functYT_ext=functYT_ext,
+                #                       functYT_ext_args=functYT_ext_args,
+                #                       isDateYT_ext=isDateYT_ext,
+                #                       functYT_sum=functYT_sum,
+                #                       functYT_sum_args=functYT_sum_args)
 
                 df_Xdata = res$data
                 df_Xmod = res$mod
@@ -273,7 +263,7 @@ if ('station_trend_analyse' %in% to_do) {
                 df_XEx = res_Xanalyse$extract
                 # Gets the trend results for the variable
                 df_Xtrend = res_Xanalyse$estimate
-
+                
                 if (!all(Code %in% missingCode)) {
                     # df_Xdata = rbind(df_Xdata_read, df_Xdata)
                     # df_Xmod = rbind(df_Xmod_read, df_Xmod)
@@ -311,36 +301,36 @@ if ('station_trend_analyse' %in% to_do) {
             }
 
 ### 1.3. Saving ______________________________________________________
-            if ('modified_data' %in% saving & !read_results) {
-                # Writes modified data
-                write_data(df_Xdata, df_Xmod, resdir,
-                           filedir=file.path(modified_data_dir,
-                                             var, monthSamplePeriod))
+            # if ('modified_data' %in% saving & !read_results) {
+            #     # Writes modified data
+            #     write_data(df_Xdata, df_Xmod, resdir,
+            #                filedir=file.path(modified_data_dir,
+            #                                  var, monthSamplePeriod))
                 
-                if (fast_format) {
-                    write_dataFST(df_Xdata, resdir,
-                                  filedir='fst',
-                                  filename=paste0('data_', var,
-                                                  '_', monthSamplePeriod,
-                                                  '.fst'))
-                }
-            }
+            #     if (fast_format) {
+            #         write_dataFST(df_Xdata, resdir,
+            #                       filedir='fst',
+            #                       filename=paste0('data_', var,
+            #                                       '_', monthSamplePeriod,
+            #                                       '.fst'))
+            #     }
+            # }
 
-            if ('analyse' %in% saving) {                
-                # Writes trend analysis results
-                write_analyse(res_Xanalyse, resdir,
-                              filedir=file.path(trend_dir,
-                                                var, monthSamplePeriod))
+            # if ('analyse' %in% saving) {                
+            #     # Writes trend analysis results
+            #     write_analyse(res_Xanalyse, resdir,
+            #                   filedir=file.path(trend_dir,
+            #                                     var, monthSamplePeriod))
                 
-                if (fast_format) {
-                    write_dataFST(df_XEx,
-                                  resdir,
-                                  filedir='fst',
-                                  filename=paste0(var, 'Ex_',
-                                                  monthSamplePeriod,
-                                                  '.fst'))
-                }
-            }
+            #     if (fast_format) {
+            #         write_dataFST(df_XEx,
+            #                       resdir,
+            #                       filedir='fst',
+            #                       filename=paste0(var, 'Ex_',
+            #                                       monthSamplePeriod,
+            #                                       '.fst'))
+            #     }
+            # }
         }
     }
 }

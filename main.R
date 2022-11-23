@@ -68,8 +68,8 @@ computer_work_path =
 # ash\\data\\.
 filedir =
     # ''
-    'AEAG_selection'
-    # 'RRSE'
+    # 'AEAG_selection'
+    'RRSE'
 
 # Name of the files that will be analysed from the data directory
 # (if 'all', all the file of the directory will be chosen)
@@ -80,13 +80,13 @@ filename =
         # 'X0500010_HYDRO_QJM.txt'
         # 'Q0214010_HYDRO_QJM.txt',
         # 'H7833520_HYDRO_QJM.txt',
-        'O0384010_HYDRO_QJM.txt',
-        'O3314010_HYDRO_QJM.txt',
+        # 'O0384010_HYDRO_QJM.txt',
+        # 'O3314010_HYDRO_QJM.txt',
         # 'S2235610_HYDRO_QJM.txt',
-        'O1484320_HYDRO_QJM.txt',
-        'O0362510_HYDRO_QJM.txt'
-        # 'A3301010_HYDRO_QJM.txt'
-        # 'J5704810_HYDRO_QJM.txt'
+        # 'O1484320_HYDRO_QJM.txt',
+        # 'O0362510_HYDRO_QJM.txt'
+        'A3301010_HYDRO_QJM.txt',
+        'A2332110_HYDRO_QJM.txt'
         # '^[A]'
     )
 
@@ -129,8 +129,8 @@ filename =
 to_do =
     c(
         'station_extraction',
-        'station_trend_analyse'
-        # 'station_trend_plot'
+        'station_trend_analyse',
+        'station_trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
@@ -403,7 +403,7 @@ pdf_chunk =
 to_plot_station =
     c(
         # 'summary',
-        # 'datasheet'
+        'datasheet'
         # 'table'
         # 'map'
         # 'map_regime'
@@ -452,7 +452,7 @@ axis_xlim =
 # colorbar extremes. For example, if set to 0.01, quartile 1 and
 # quantile 99 will be used as the minimum and maximum values to assign
 # to minmimal maximum colors.
-exQprob = 0.01
+exXprob = 0.01
 
 
 #  ___              ___             _   
