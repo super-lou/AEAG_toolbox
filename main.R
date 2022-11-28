@@ -75,8 +75,8 @@ filedir =
 # (if 'all', all the file of the directory will be chosen)
 filename =
     # ''
-    # 'all'
-    c(
+    'all'
+    # c(
         # 'X0500010_HYDRO_QJM.txt'
         # 'Q0214010_HYDRO_QJM.txt',
         # 'H7833520_HYDRO_QJM.txt',
@@ -85,10 +85,10 @@ filename =
         # 'S2235610_HYDRO_QJM.txt',
         # 'O1484320_HYDRO_QJM.txt',
         # 'O0362510_HYDRO_QJM.txt'
-        'A3301010_HYDRO_QJM.txt',
-        'A2332110_HYDRO_QJM.txt'
+        # 'A3301010_HYDRO_QJM.txt',
+        # 'A4050620_HYDRO_QJM.txt'
         # '^[A]'
-    )
+    # )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 # This vector regroups all the different step you want to do. For
@@ -274,7 +274,9 @@ df_flag = data.frame(
 ## 4. ANALYSED VARIABLES _____________________________________________
 ### 4.1. Hydrological variables ______________________________________
 # Name of the directory that regroups all variables information
-var_dir = 'variables'
+CARD_dir = file.path(gsub("[/]project[_].*$", "", getwd()),
+                    "CARD_project",
+                    "CARD")
 # Name of the tool directory that includes all the functions needed to
 # calculate a variable
 init_tools_dir = '__tools__'
@@ -282,9 +284,9 @@ init_tools_dir = '__tools__'
 init_var_file = '__default__.R'
 
 
-# Name of the subdirectory in 'var_dir' that includes variables to
+# Name of the subdirectory in 'CARD_dir' that includes variables to
 # analyse. If no subdirectory is selected, all variable files will be
-# used in 'var_dir' (which is may be too much).
+# used in 'CARD_dir' (which is may be too much).
 # This subdirectory can follows some rules :
 # - Variable files can be rename to began with a number followed by an
 #   underscore '_' to create an order in variables. For example,
@@ -297,8 +299,8 @@ init_var_file = '__default__.R'
 var_to_analyse_dir =
     # ''
     # 'AEAG'
-    # 'MAKAHO'
-    'WIP'
+    'MAKAHO'
+    # 'WIP'
 
 ### 4.2. Climate variables ___________________________________________
 to_analyse_climate = c(
@@ -316,7 +318,7 @@ level = 0.1
 # - 'every' : Each month will be use one by one as a start of the
 #             hydrological year
 # - 'fixed' : Hydrological year is selected with the hydrological year
-#             noted in the variable file in 'var_dir'
+#             noted in the variable file in 'CARD_dir'
 # - 'optimale' : Hydrological period is determined for each station by
 #                following rules listed in the next variable.
 samplePeriod_mode =

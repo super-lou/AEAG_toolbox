@@ -35,7 +35,7 @@
 ## 1. STATION TREND ANALYSIS _________________________________________
 if ('station_trend_analyse' %in% to_do) {
 
-    script_to_analyse_dirpath = file.path(var_dir, var_to_analyse_dir)
+    script_to_analyse_dirpath = file.path(CARD_dir, var_to_analyse_dir)
     
     script_to_analyse = list.files(script_to_analyse_dirpath,
                                    pattern=".R$",
@@ -73,7 +73,7 @@ if ('station_trend_analyse' %in% to_do) {
             
         for (iHY in 1:nSamplePeriod) {
 
-            list_path = list.files(file.path(var_dir,
+            list_path = list.files(file.path(CARD_dir,
                                              init_tools_dir),
                                    pattern='*.R$',
                                    full.names=TRUE)
@@ -82,7 +82,7 @@ if ('station_trend_analyse' %in% to_do) {
             }
 
             Process_default = sourceProcess(
-                file.path(var_dir,init_var_file))
+                file.path(CARD_dir,init_var_file))
             
             Process = sourceProcess(
                 file.path(script_to_analyse_dirpath, script),
