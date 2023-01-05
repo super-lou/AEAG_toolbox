@@ -68,40 +68,40 @@ computer_work_path =
 # ash\\data\\.
 filedir =
     # ''
-    # 'AEAG_selection'
-    'RRSE'
+    'AEAG_selection'
+    # 'RRSE'
 
 # Name of the files that will be analysed from the data directory
 # (if 'all', all the file of the directory will be chosen)
 filename =
     # ''
-    'all'
-    # c(
+    # 'all'
+    c(
         # 'X0500010_HYDRO_QJM.txt'
         # 'Q0214010_HYDRO_QJM.txt',
         # 'H7833520_HYDRO_QJM.txt',
         # 'O0384010_HYDRO_QJM.txt',
-        # 'O3314010_HYDRO_QJM.txt',
-        # 'S2235610_HYDRO_QJM.txt',
-        # 'O1484320_HYDRO_QJM.txt',
+        'O3314010_HYDRO_QJM.txt',
+        'S2235610_HYDRO_QJM.txt',
+        'O1484320_HYDRO_QJM.txt'
         # 'O0362510_HYDRO_QJM.txt'
         # 'A3301010_HYDRO_QJM.txt',
         # 'A4050620_HYDRO_QJM.txt'
         # '^[A]'
-    # )
+    )
 
 ## 3. WHAT YOU WANT TO DO ____________________________________________
 # This vector regroups all the different step you want to do. For
-# example if you write 'station_extraction', the extraction of the
+# example if you write 'extraction', the extraction of the
 # data for the station will be done. If you add also
-# 'station_analyse', the extraction and then the trend analyse will be
-# done. But if you only write, for example, 'station_plot', without
-# having previously execute the code with 'station_extraction' and
-# 'station_analyse', it will results in a failure.
+# 'analyse', the extraction and then the trend analyse will be
+# done. But if you only write, for example, 'plot', without
+# having previously execute the code with 'extraction' and
+# 'analyse', it will results in a failure.
 #
 # Options are listed below with associated results after '>' :
 #
-# - 'station_extraction' : Extraction of data and meta data tibbles
+# - 'extraction' : Extraction of data and meta data tibbles
 #                          about stations
 #                          > 'data' 
 #                          > 'df_meta'
@@ -111,26 +111,26 @@ filename =
 #                          > 'data' 
 #                          > 'df_meta'
 #
-# - 'station_trend_analyse' : Trend analyses of stations data
+# - 'trend_analyse' : Trend analyses of stations data
 #                             > 'df_XEx' : tibble of extracted data
 #                             > 'df_Xtrend' : tibble of trend results
 #
-# - 'station_break_analyse' : Brief analysis of break data
+# - 'break_analyse' : Brief analysis of break data
 #                             > 'df_break' : tibble of break results
 #
 # - 'climate_trend_analyse' : Trend analyses of the climate data
 #                             > 'df_XEx' : tibble of extracted data
 #                             > 'df_Xtrend' : tibble of trend results
 #
-# - 'station_serie_plot' : Plotting of flow series for stations
-# - 'station_trend_plot' : Plotting of trend analyses of stations
-# - 'station_break_plot' : Plotting of the break analysis
+# - 'serie_plot' : Plotting of flow series for stations
+# - 'trend_plot' : Plotting of trend analyses of stations
+# - 'break_plot' : Plotting of the break analysis
 # - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
-        'station_extraction',
-        'station_trend_analyse',
-        'station_trend_plot'
+        'extraction',
+        'trend_analyse'
+        # 'trend_plot'
     )
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
@@ -250,7 +250,7 @@ TXTlistname =
 
 ## 3. DATA CORRECTION ________________________________________________
 # Local corrections of the data
-df_flag = data.frame(
+flag = data.frame(
     Code=c('O3141010',
            'O7635010',
            'O7635010',
@@ -274,9 +274,11 @@ df_flag = data.frame(
 ## 4. ANALYSED VARIABLES _____________________________________________
 ### 4.1. Hydrological variables ______________________________________
 # Name of the directory that regroups all variables information
-CARD_dir = file.path(gsub("[/]project[_].*$", "", getwd()),
-                    "CARD_project",
-                    "CARD")
+CARD_dir = file.path(gsub("[/]project[/].*$", "",
+                          computer_work_path),
+                     "project",
+                     "CARD_project",
+                     "CARD")
 # Name of the tool directory that includes all the functions needed to
 # calculate a variable
 init_tools_dir = '__tools__'
@@ -299,8 +301,8 @@ init_var_file = '__default__.R'
 var_to_analyse_dir =
     # ''
     # 'AEAG'
-    'MAKAHO'
-    # 'WIP'
+    # 'MAKAHO'
+    'WIP'
 
 ### 4.2. Climate variables ___________________________________________
 to_analyse_climate = c(
@@ -560,19 +562,19 @@ input_trend_period = sapply(trend_period, paste, collapse='/')
 
 
 ## 1. EXTRACTION _____________________________________________________
-if ('station_extraction' %in% to_do | 'climate_extraction' %in% to_do) {
+if ('extraction' %in% to_do | 'climate_extraction' %in% to_do) {
     print('EXTRACTION')
     source('script_extract.R', encoding='UTF-8')
 }
 
 ## 2. ANALYSES _______________________________________________________
-if ('station_trend_analyse' %in% to_do | 'station_break_analyse' %in% to_do | 'climate_trend_analyse' %in% to_do) {
+if ('trend_analyse' %in% to_do | 'break_analyse' %in% to_do | 'climate_trend_analyse' %in% to_do) {
     print('ANALYSES')
     source('script_analyse.R', encoding='UTF-8')
 }
 
 ## 3. PLOTTING _______________________________________________________
-if ('station_serie_plot' %in% to_do | 'station_trend_plot' %in% to_do | 'station_break_plot' %in% to_do | 'climate_trend_plot' %in% to_do) {
+if ('serie_plot' %in% to_do | 'trend_plot' %in% to_do | 'break_plot' %in% to_do | 'climate_trend_plot' %in% to_do) {
     print('PLOTTING')
     source('script_layout.R', encoding='UTF-8')
 }

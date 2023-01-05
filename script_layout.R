@@ -52,7 +52,7 @@ logo_path = load_logo(resources_path, logo_dir, PRlogo_file,
 
 ## 1. HYDROMETRIC STATIONS LAYOUT ____________________________________
 ### 1.1. Flow time series for stations _______________________________
-if ('station_serie_plot' %in% to_do) {
+if ('serie_plot' %in% to_do) {
     # Square root computation
     df_sqrt = compute_sqrt(data)
     # Layout
@@ -72,7 +72,7 @@ if ('station_serie_plot' %in% to_do) {
 }
 
 ### 1.2. Analyses layout _____________________________________________
-if ('station_trend_plot' %in% to_do) {    
+if ('trend_plot' %in% to_do) {    
     layout_panel(to_plot=to_plot_station,
                  df_meta=df_meta,
                  data=data_analyse,
@@ -106,7 +106,7 @@ if ('station_trend_plot' %in% to_do) {
 
 
 ## 2. BREAK LAYOUT ___________________________________________________
-if ('station_break_plot' %in% to_do) {
+if ('break_plot' %in% to_do) {
     # For all the variable
     for (v in var) {
         # Gets the break results for the variable

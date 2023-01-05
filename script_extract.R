@@ -33,7 +33,7 @@
 
 
 ## 1. EXTRACTION OF HYDROMETRIC STATIONS _____________________________
-if ('station_extraction' %in% to_do) {
+if ('extraction' %in% to_do) {
     # Initialization of null dataframes if there is no data selected
     data_DOCX = NULL
     data_TXT = NULL
