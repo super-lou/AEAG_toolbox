@@ -21,100 +21,225 @@
 
 
 # Script that manages the call to the right process in order to
-# realise extraction of data.
+# realise analyses.
 
 
-## 1. EXTRACTION OF HYDROMETRIC STATIONS _____________________________
-if ('extraction' %in% to_do) {
-    # Initialization of null dataframes if there is no data selected
-    data_DOCX = NULL
-    data_TXT = NULL
-    data_MAN = NULL
-    df_meta_DOCX = NULL
-    df_meta_TXT = NULL
-    df_meta_MAN = NULL
+## 1. STATION TREND ANALYSIS _________________________________________
+if ('trend_analyse' %in% to_do) {
 
-### 1.1. Selection of station from a formatted '.docx' file __________
-    if (DOCXlistname != "") {
-        # Get only the selected station from a list station file
-        filename_DOCX = get_selection_DOCX(computer_data_path,
-                                           DOCXlistdir,
-                                           DOCXlistname,
-                                           code_nameCol='code',
-                                           choice_nameCol='Choix',
-                                           choice_Val=c('A garder',
-                                                        'Ajout'), 
-                                           optname='_HYDRO_QJM')
+    script_to_analyse_dirpath = file.path(CARD_dir, var_to_analyse_dir)
+    
+    script_to_analyse = list.files(script_to_analyse_dirpath,
+                                   pattern=".R$",
+                                   recursive=TRUE,
+                                   include.dirs=FALSE,
+                                   full.names=FALSE)
+
+    script_to_analyse = script_to_analyse[!grepl("default.R",
+                                                 script_to_analyse)]
+
+    event_to_analyse = list.dirs(script_to_analyse_dirpath,
+                                 recursive=TRUE, full.names=FALSE)
+    event_to_analyse = event_to_analyse[event_to_analyse != ""]
+    event_to_analyse = gsub('.*_', '', event_to_analyse)
+
+    structure = replicate(length(event_to_analyse), c())
+    names(structure) = event_to_analyse
+    
+    var_analysed = c()
+    PLOT = list()
+    
+    ### 1.3. Trend analyses ______________________________________________
+    for (script in script_to_analyse) {
+
+        print(script)
+
+        list_path = list.files(file.path(CARD_dir,
+                                         init_tools_dir),
+                               pattern='*.R$',
+                               full.names=TRUE)
+        for (path in list_path) {
+            source(path, encoding='UTF-8')    
+        }
+
+        Process_default = sourceProcess(
+            file.path(CARD_dir,init_var_file))
         
-        # Extract metadata about selected stations
-        df_meta_DOCX = extract_meta(computer_data_path, filedir,
-                                    filename_DOCX)
-        # Extract data about selected stations
-        data_DOCX = extract_data(computer_data_path, filedir,
-                                    filename_DOCX)
+        Process = sourceProcess(
+            file.path(script_to_analyse_dirpath, script),
+            default=Process_default)
+
+        principal = Process$P
+        principal_names = names(principal)
+        for (i in 1:length(principal)) {
+            assign(principal_names[i], principal[[i]])
+        }
+
+        split_script = split_path(script)
+        
+        if (length(split_script) == 1) {
+            if (!('None' %in% names(structure))) {
+                structure = append(list(None=c()), structure)
+            }
+            structure[['None']] = c(structure[['None']], var)
+        } else if (length(split_script) == 2) {
+            dir = split_script[2]
+            dir = gsub('.*_', '', dir)
+            structure[[dir]] = c(structure[[dir]], var)
+        }
+        
+        
+        if (samplePeriod_mode == 'optimale') {
+            if (identical(samplePeriod_opti[[event]], "min")) {
+                minQM = paste0(formatC(df_meta$minQM,
+                                       width=2,
+                                       flag="0"),
+                               '-01')
+                samplePeriodMod = tibble(Code=df_meta$Code,
+                                         sp=minQM)
+            } else if (identical(samplePeriod_opti[[event]], "max")) {
+                maxQM = paste0(formatC(df_meta$maxQM,
+                                       width=2,
+                                       flag="0"),
+                               '-01')
+                samplePeriodMod = tibble(Code=df_meta$Code,
+                                         sp=maxQM)
+            } else {
+                samplePeriodMod = samplePeriod_opti[[event]]
+            }
+            
+        } else {
+            samplePeriodMod = NULL
+        }
+
+        if (!is.null(samplePeriodMod)) {
+            nProcess = length(Process)
+            for (i in 1:nProcess) {
+                if (!is.null(Process[[i]]$samplePeriod)) {
+                    Process[[i]]$samplePeriod = samplePeriodMod
+                    samplePeriod = Process[[i]]$samplePeriod
+                }
+            }
+        }
+
+        # monthSamplePeriod = substr(samplePeriod[1], 1, 2)
+
+        if (var %in% var_analysed) {
+            next
+        }
+
+        res = get_trend(data=data,
+                        period=trend_period,
+                        level=level,
+                        flag=flag,
+                        Process)
+
+        XdataMod = res$data
+        Xmod = res$mod
+        # Gets the extracted data for the variable
+        dataEx = res$dataEx
+        # Gets the trend results for the variable
+        trend = res$trend
+
+        if ('dataMod' %in% to_assign_out) {
+            assign(paste0(var, 'dataMod'), XdataMod)
+            assign(paste0(var, 'mod'), Xmod)
+        }
+        if ('dataEx' %in% to_assign_out) {
+            assign(paste0(var, 'dataEx'), dataEx)
+        }
+        if ('trend' %in% to_assign_out) {
+            assign(paste0(var, 'trend'), trend)
+        }
+
+        var_analysed = c(var_analysed, var)
+        if ('trend_plot' %in% to_do | TRUE) {
+            
+            Plot = list(var=var,
+                        unit=unit,
+                        glose=glose,
+                        event=event,
+                        samplePeriod=samplePeriod,
+                        dataEx=dataEx,
+                        trend=trend)
+
+            PLOT = append(PLOT, list(Plot))
+        }
     }
+}
 
-### 1.2. Selection from a formatted '.txt' file ______________________
-    if (TXTlistname != ""){
-        # Get only the selected station from a list station file
-        filename_TXT = get_selection_TXT(computer_data_path, 
-                                         TXTlistdir,
-                                         TXTlistname)
-
-        # Extract metadata about selected stations
-        df_meta_TXT = extract_meta(computer_data_path, filedir,
-                                   filename_TXT)
-        # Extract data about selected stations
-        data_TXT = extract_data(computer_data_path, filedir,
-                                   filename_TXT)
-    } 
-
-### 1.3. Manual selection ____________________________________________
-    if (all(filename != "")) {
-        filename = convert_regexp(computer_data_path, filedir, filename)
-        # Extract metadata about selected stations
-        df_meta_MAN = extract_meta(computer_data_path, filedir, filename)
-        # Extract data about selected stations
-        data_MAN = extract_data(computer_data_path, filedir, filename)
+if ('meta' %in% saving) {
+    if (fast_format) {
+        write_metaFST(df_meta, resdir,
+                      filedir=file.path('fst'))
     }
-
-### 1.4. Joining of data _____________________________________________
-    df_join = join_selection(list_data=list(data_DOCX,
-                                            data_TXT,
-                                            data_MAN),
-                             list_meta=list(df_meta_DOCX,
-                                            df_meta_TXT,
-                                            df_meta_MAN),
-                             list_from=list('docx', 'txt', 'manual'))
-    data = df_join$data
-    df_meta = df_join$meta
-    
-    data = data[order(data$Code),]
-    df_meta = df_meta[order(df_meta$Code),]
-
-    # Get all different stations code
-    Code = rle(data$Code)$value
-    
-### 1.5. Add other info about stations _______________________________
-    # Time gap
-    df_meta = get_lacune(data, df_meta)
-    # Hydrograph
-    if (!is.null(mean_period[[1]])) {
-        period = mean_period[[1]]
-    } else {
-       period = trend_period[[1]] 
-    }
-    df_meta = get_hydrograph(data, df_meta,
-                             period=period)$meta
 }
 
 
+## 2. STATION BREAK ANALYSIS _________________________________________
+if ('break_analyse' %in% to_do) {
+    DF_BREAK = list()
+    # For all the variable
+    for (v in var) {
+        # Gets the trend results for the variable
+        res_trend = get(paste('res_', v, 'trend', sep=''))
+        # Performs the break analyses for some hydrological variables
+        df_break = get_break(res_trend$data, df_meta, level=0.1)
+        DF_BREAK = append(DF_BREAK, list(df_break))
+    }
+    names(DF_BREAK) = var
+}
 
-## 2. EXTRACTION OF CLIMATE DATA______________________________________
-if ('climate_extraction' %in% to_do) {
-    res = extract_climate_data(computer_data_path, 'climate',
-                              colNames=c('Date', 'PRCP_mm',
-                                         'PET_mm', 'T_degC'))
-    df_climate_data = res$data
-    df_climate_meta = res$meta
+
+## 3. CLIMATE TREND ANALYSIS _________________________________________
+if ('extract_data' %in% to_do) {
+    
+    extract = extract_data[[1]]
+
+    CARD_management(CARD=CARD_path,
+                    tmp=tmppath,
+                    layout=c(extract$name, "[",
+                             extract$variables, "]"),
+                    overwrite=FALSE)
+
+    res = CARD_extraction(data,
+                          CARD_path=CARD_path,
+                          CARD_dir=extract$name,
+                          CARD_tmp=tmppath,
+                          period=periodAll,
+                          simplify=extract$simplify,
+                          suffix=extract$suffix,
+                          expand_overwrite=extract$expand,
+                          cancel_lim=extract$cancel_lim,
+                          verbose=subverbose)
+
+    dataEX = res$dataEX
+    metaEX = res$metaEX
+
+    trendEX = dplyr::tibble()
+    
+    for (period in trend_period) {
+        period = as.Date(period)
+
+        for (i in 1:length(dataEX)) {
+            trendEX_tmp = process_trend(
+                dplyr::filter(dataEX[[i]],
+                              min(period) <= Date &
+                              Date <= max(period)),
+                MK_level=level,
+                verbose=subverbose)
+
+            trendEX_tmp = dplyr::bind_cols(trendEX_tmp,
+                                           var=names(dataEX)[i])
+
+            if (nrow(trendEX) == 0) {
+                trendEX = trendEX_tmp
+            } else {
+                trendEX = dplyr::bind_rows(trendEX,
+                                           trendEX_tmp)
+            }
+        }
+    }
+    dataEX = purrr::reduce(dataEX, dplyr::full_join,
+                           by=c("Code", "Date"))
 }

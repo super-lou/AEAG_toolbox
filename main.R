@@ -29,31 +29,27 @@
 # |_ _| _ _   / _| ___  _ _  _ __   __ _ | |_ (_) ___  _ _   ___
 #  | | | ' \ |  _|/ _ \| '_|| '  \ / _` ||  _|| |/ _ \| ' \ (_-<
 # |___||_||_||_|  \___/|_|  |_|_|_|\__,_| \__||_|\___/|_||_|/__/ _____
-#
 # If you want to contact the author of the code you need to contact
 # first Louis Héraut who is the main developer. If it is not possible,
 # Éric Sauquet is the main referent at INRAE to contact.
 #
-# Louis Héraut : <louis.heraut@inrae.fr>
+# Louis Héraut : <https://github.com/super-lou>
+#                <louis.heraut@inrae.fr>
+#                 
 # Éric Sauquet : <eric.sauquet@inrae.fr>
 #
-# The statistical tools used in this code come from the
-# StatsAnalysisTrend package developed by Valentin Mansanarez.
-#
-# See the 'README.txt' file for more information about the utilisation
+# See the 'README.md' file for more information about the utilisation
 # of this toolbox.
 
 
-#  _   _                  ___              __  _       
-# | | | | ___ ___  _ _   / __| ___  _ _   / _|(_) __ _ 
-# | |_| |(_-</ -_)| '_| | (__ / _ \| ' \ |  _|| |/ _` |
-#  \___/ /__/\___||_|    \___|\___/|_||_||_|  |_|\__, | ______________
-## You can modify this part without risk ##      |___/ 
-
-## 1. WORKING DIRECTORY ______________________________________________
-# Work path (it normally needs to end with '\\ashes' directory)
-computer_work_path = 
-    '/home/louis/Documents/bouleau/INRAE/project/ashes_project/ashes_toolbox'
+#  ___                            
+# | _ \ _ _  ___  __  ___  ___ ___
+# |  _/| '_|/ _ \/ _|/ -_)(_-<(_-<
+# |_|  |_|  \___/\__|\___|/__//__/ ___________________________________
+## 1. REQUIREMENTS ___________________________________________________
+# Explore2_toolbox path
+lib_path =
+    "./"
 
 ## 2. DATA DIRECTORY _________________________________________________
 # Directory of Banque HYDRO data you want to use in ash\\data\\ to
@@ -68,15 +64,15 @@ filedir =
 # (if 'all', all the file of the directory will be chosen)
 filename =
     # ''
-    # 'all'
+    'all'
     c(
         # 'X0500010_HYDRO_QJM.txt'
         # 'Q0214010_HYDRO_QJM.txt',
         # 'H7833520_HYDRO_QJM.txt',
         # 'O0384010_HYDRO_QJM.txt',
-        'O3314010_HYDRO_QJM.txt',
-        'S2235610_HYDRO_QJM.txt',
-        'O1484320_HYDRO_QJM.txt'
+        # 'O3314010_HYDRO_QJM.txt',
+        # 'S2235610_HYDRO_QJM.txt',
+        # 'O1484320_HYDRO_QJM.txt'
         # 'O0362510_HYDRO_QJM.txt'
         # 'A3301010_HYDRO_QJM.txt',
         # 'A4050620_HYDRO_QJM.txt'
@@ -121,10 +117,39 @@ filename =
 # - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
-        'extraction',
-        'trend_analyse'
+        'create_data',
+        'extract_data'
         # 'trend_plot'
+        # 'climate_trend_plot'
     )
+
+mode =
+    # "hydro"
+    "climat"
+
+climat_data_dir = "climat"
+
+extract_data =
+    c(
+        # 'WIP'
+        'AEAG_climat'
+    )
+
+AEAG_climat = 
+    list(name='AEAG_climat',
+         variables=c("PA", "TA", "ETPA"),
+         suffix=NULL,
+         expand=FALSE,
+         cancel_lim=FALSE,
+         simplify=FALSE)
+
+extract_data_tmp = lapply(extract_data, get)
+names(extract_data_tmp) = extract_data
+extract_data = extract_data_tmp
+
+verbose = TRUE
+subverbose = TRUE
+
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
 # Periods of time to perform the trend analyses. More precisely :
@@ -136,8 +161,8 @@ periodAll =
     # c('1968-01-01', '2020-12-31')
     c('1900-01-01', '2020-12-31')
 periodSub =
-    NULL
-    # c('1968-01-01', '2020-12-31')
+    # NULL
+    c('1968-01-01', '2020-12-31')
 
 # Periods of time to average. More precisely :
 # - 'periodRef' tends to represent the reference period of the climate
@@ -145,10 +170,10 @@ periodSub =
 #    flow data
 periodRef =
     NULL
-    # c('1968-01-01', '1988-12-31')
+    c('1968-01-01', '1988-12-31')
 periodCur =
     NULL
-    # c('2000-01-01', '2020-12-31')
+    c('2000-01-01', '2020-12-31')
 
 
 #    _       _                               _ 
@@ -157,67 +182,6 @@ periodCur =
 # /_/ \_\\__,_| \_/ \__,_||_||_|\__|\___|\__,_| ______________________
 ## You still can modify this part without major risk but it can be ##
 ## less intuitive ##                                          
-
-## 1. FILES STRUCTURE _________________________________________________
-### 1.1. Input directories ___________________________________________
-# Path to the data
-computer_data_path = file.path(computer_work_path, 'data')
-
-# Resources directory
-resources_path = file.path(computer_work_path, 'resources')
-if (!(file.exists(resources_path))) {
-  dir.create(resources_path)
-}
-print(paste('resources_path :', resources_path))
-
-# Logo filename
-logo_dir = 'logo'
-PRlogo_file = 'logo_Prefet_bassin.png'
-AEAGlogo_file = 'agence-de-leau-adour-garonne_logo.png'
-INRAElogo_file = 'Logo-INRAE_Transparent.png'
-FRlogo_file = 'Republique_Francaise_RVB.png'
-
-shp_dir = 'map'
-# Path to the shapefile for france contour from 'computer_data_path' 
-fr_shpdir = file.path(shp_dir, 'france')
-fr_shpname = 'gadm36_FRA_0.shp'
-
-# Path to the shapefile for basin shape from 'computer_data_path' 
-bs_shpdir = file.path(shp_dir, 'bassin')
-bs_shpname = 'BassinHydrographique.shp'
-
-# Path to the shapefile for sub-basin shape from 'computer_data_path' 
-sbs_shpdir = file.path(shp_dir, 'sous_bassin')
-sbs_shpname = 'SousBassinHydrographique.shp'
-
-# Path to the shapefile for station basins shape from 'computer_data_path' 
-cbs_shpdir = file.path(shp_dir, 'bassin_station')
-cbs_shpname = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
-cbs_coord = c('L93', 'L2')
-
-# Path to the shapefile for river shape from 'computer_data_path' 
-rv_shpdir = file.path('map', 'river')
-rv_shpname = 'CoursEau_FXX.shp'
-
-### 1.2. Output directories __________________________________________
-# Result directory
-resdir = file.path(computer_work_path, 'results')
-if (!(file.exists(resdir))) {
-  dir.create(resdir)
-}
-print(paste('resdir :', resdir))
-
-# Result sub directory
-modified_data_dir = 'modified_data'
-trend_dir = 'trend_analyses'
-
-# Figure directory
-figdir = file.path(computer_work_path, 'figures')
-if (!(file.exists(figdir))) {
-  dir.create(figdir)
-}
-print(paste('figdir :', figdir))
-
 
 ## 2. STATION SELECTION BY LIST ______________________________________
 ### 2.1. Selection with '.docx' file _________________________________
@@ -263,22 +227,6 @@ flag = data.frame(
                3) # /!\ Unit
 )
 
-
-## 4. ANALYSED VARIABLES _____________________________________________
-### 4.1. Hydrological variables ______________________________________
-# Name of the directory that regroups all variables information
-CARD_dir = file.path(gsub("[/]project[/].*$", "",
-                          computer_work_path),
-                     "project",
-                     "CARD_project",
-                     "CARD")
-# Name of the tool directory that includes all the functions needed to
-# calculate a variable
-init_tools_dir = '__tools__'
-# Name of the default parameters file for a variable
-init_var_file = '__default__.R'
-
-
 # Name of the subdirectory in 'CARD_dir' that includes variables to
 # analyse. If no subdirectory is selected, all variable files will be
 # used in 'CARD_dir' (which is may be too much).
@@ -299,9 +247,9 @@ var_to_analyse_dir =
 
 ### 4.2. Climate variables ___________________________________________
 to_analyse_climate = c(
-    # 'PA',
-    # 'TA',
-    # 'ETPA'
+    'PA',
+    'TA',
+    'ETPA'
 )
 
 
@@ -309,35 +257,17 @@ to_analyse_climate = c(
 # The risk of the Mann-Kendall trend detection test
 level = 0.1
 
-# Mode of selection of the hydrological period. Options are : 
-# - 'every' : Each month will be use one by one as a start of the
-#             hydrological year
-# - 'fixed' : Hydrological year is selected with the hydrological year
-#             noted in the variable file in 'CARD_dir'
-# - 'optimale' : Hydrological period is determined for each station by
-#                following rules listed in the next variable.
-samplePeriod_mode =
-    # 'every'
-    # 'fixed'
-    'optimale'
-
-# Parameters for the optimal selection of the hydrological year. As
-# you can see, the optimisation is separated between each hydrological
-# event. You must therefore select an optimisation for each event. The
-# possibilities are:
-# - 'min' or 'max' to choose the month associated with the minimum or
-#   maximum of the mean monthly flow as the beginning of the
-#   hydrological year.
-# - A month and a day separated by a '-' in order to directly select
-#   the beginning of the hydrological year.
-# - A vector of two months and day to select a beginning and an end of
-#   the hydrological year.
-samplePeriod_opti = list(
-    'Crue' = 'min',
-    'Crue Nivale' = '09-01',
-    'Moyennes Eaux' = 'min',
-    'Étiage' = c('05-01', '11-30')
-)
+# # Mode of selection of the hydrological period. Options are : 
+# # - 'every' : Each month will be use one by one as a start of the
+# #             hydrological year
+# # - 'fixed' : Hydrological year is selected with the hydrological year
+# #             noted in the variable file in 'CARD_dir'
+# # - 'optimale' : Hydrological period is determined for each station by
+# #                following rules listed in the next variable.
+# samplePeriod_mode =
+#     # 'every'
+#     # 'fixed'
+#     'optimale'
 
 
 ## 6. READING AND WRITING OF RESULTS _________________________________
@@ -428,11 +358,12 @@ river_selection =
 # Which logo do you want to show in the footnote
 logo_to_show =
     c(
-        # 'PR',
-        'FR',
-        'INRAE'
-        # 'AEAG'
+        'PR'='logo_Prefet_bassin.png',
+        'FR'='Republique_Francaise_RVB.png',
+        'INRAE'='Logo-INRAE_Transparent.png',
+        'AEAG'='agence-de-leau-adour-garonne_logo.png'
     )
+
 
 ### 7.3. Other _______________________________________________________
 # Tolerance of the simplification algorithm for shapefile in sf
@@ -449,7 +380,7 @@ axis_xlim =
 # colorbar extremes. For example, if set to 0.01, quartile 1 and
 # quantile 99 will be used as the minimum and maximum values to assign
 # to minmimal maximum colors.
-exXprob = 0.01
+exProb = 0.01
 
 
 #  ___              ___             _   
@@ -459,49 +390,74 @@ exXprob = 0.01
 ## /!\ Do not touch if you are not aware ##
 
 ## 0. INITIALISATION _________________________________________________
+# Computer
+computer = Sys.info()["nodename"]
+print(paste0("Computer ", computer))
+computer_file_list = list.files(path=lib_path,
+                                pattern="computer[_].*[.]R")
+computer_list = gsub("(computer[_])|([.]R)", "", computer_file_list)
+computer_file = computer_file_list[sapply(computer_list,
+                                          grepl, computer)]
+computer_path = file.path(lib_path, computer_file)
+print(paste0("So reading file ", computer_path))
+source(computer_path, encoding='UTF-8')
+
 # Sets working directory
 setwd(computer_work_path)
 
-# Import MKstat
-dev_path = file.path(dirname(dirname(computer_work_path)),
-                     'MKstat_project', 'MKstat', 'R')
-if (file.exists(dev_path)) {
-    print('Loading MKstat from local directory')
+# Import EXstat
+dev_path = file.path(dev_lib_path,
+                     c('', 'EXstat_project'), 'EXstat', 'R')
+if (any(file.exists(dev_path))) {
+    print('Loading EXstat from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
 } else {
-    print('Loading MKstat from package')
-    library(MKstat)
+    print('Loading EXstat from package')
+    library(EXstat)
 }
 
-# Import ashes
-dev_path = file.path(dirname(computer_work_path),
-                     'ashes', 'R')
-if (file.exists(dev_path)) {
-    print('Loading ashes from local directory')
+# Import ASHE
+dev_path = file.path(dev_lib_path,
+                     c('', 'ASHE_project'), 'ASHE', 'R')
+if (any(file.exists(dev_path))) {
+    print('Loading ASHE from local directory')
     list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
 } else {
-    print('Loading ashes from package')
-    library(ashes)
+    print('Loading ASHE from package')
+    library(ASHE)
 }
 
-# Import dataSheep
-dev_path = file.path(dirname(dirname(computer_work_path)),
-                     'dataSheep_project', 'dataSheep', 'R')
-if (file.exists(dev_path)) {
-    print('Loading dataSheep from local directory')
-    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE)
+
+# Import dataSHEEP
+dev_path = file.path(dev_lib_path,
+                     c('', 'dataSHEEP_project'), 'dataSHEEP',
+                     "R")
+if (any(file.exists(dev_path))) {
+    print('Loading dataSHEEP')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
+                           recursive=TRUE)
     for (path in list_path) {
         source(path, encoding='UTF-8')    
     }
-} else {
-    print('Loading dataSheep from package')
-    library(dataSheep)
+}
+
+# Import SHEEPfold
+dev_path = file.path(dev_lib_path,
+                     c('', 'SHEEPfold_project'), 'SHEEPfold',
+                     "__SHEEP__")
+if (any(file.exists(dev_path))) {
+    print('Loading SHEEPfold')
+    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
+                           recursive=TRUE)
+    for (path in list_path) {
+        source(path, encoding='UTF-8')    
+    }
 }
 
 # Import other library
@@ -534,6 +490,9 @@ library(stringr)
 # potentialy useless
 # library(trend)
 
+
+tmppath = file.path(computer_work_path, tmpdir)
+
 # Creates list of period for trend analysis
 trend_period = NULL
 if (!is.null(periodAll)) {
@@ -555,15 +514,15 @@ input_trend_period = sapply(trend_period, paste, collapse='/')
 
 
 ## 1. EXTRACTION _____________________________________________________
-if ('extraction' %in% to_do | 'climate_extraction' %in% to_do) {
+if ('create_data' %in% to_do) {
     print('EXTRACTION')
-    source('script_extract.R', encoding='UTF-8')
+    source('script_create.R', encoding='UTF-8')
 }
 
 ## 2. ANALYSES _______________________________________________________
-if ('trend_analyse' %in% to_do | 'break_analyse' %in% to_do | 'climate_trend_analyse' %in% to_do) {
-    print('ANALYSES')
-    source('script_analyse.R', encoding='UTF-8')
+if ('extract_data' %in% to_do) {
+    print('EXTRACTION')
+    source('script_extract.R', encoding='UTF-8')
 }
 
 ## 3. PLOTTING _______________________________________________________

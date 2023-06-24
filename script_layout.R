@@ -26,20 +26,24 @@
 
 ## 0. SHAPEFILE LOADING ______________________________________________
 # Shapefile importation in order to do it only once time
-if (!exists("shapefile_list")) {
-    shapefile_list = load_shapefile(resources_path, data,
-                                    fr_shpdir, fr_shpname,
-                                    bs_shpdir, bs_shpname,
-                                    sbs_shpdir, sbs_shpname,
-                                    cbs_shpdir, cbs_shpname, cbs_coord,
-                                    rv_shpdir, rv_shpname,
-                                    river_selection=river_selection,
-                                    toleranceRel=toleranceRel)
+if (!exists("Shapefiles")) {
+    post("### Loading shapefiles")
+    Code = levels(factor(data))
+    Shapefiles = load_shapefile(
+        computer_data_path, Code,
+        france_dir, france_file,
+        bassinHydro_dir, bassinHydro_file,
+        regionHydro_dir, regionHydro_file,
+        entiteHydro_dir, entiteHydro_file,
+        entiteHydro_coord,
+        river_dir, river_file,
+        river_selection=river_selection,
+        river_length=river_length,
+        toleranceRel=toleranceRel)
 }
 
-logo_path = load_logo(resources_path, logo_dir, PRlogo_file,
-                      AEAGlogo_file, INRAElogo_file, FRlogo_file,
-                      logo_to_show)
+logo_path = load_logo(resources_path, logo_dir, logo_to_show)
+# icon_path = file.path(resources_path, icon_dir)
 
 
 ## 1. HYDROMETRIC STATIONS LAYOUT ____________________________________
@@ -112,33 +116,16 @@ if ('break_plot' %in% to_do) {
 
 ## 3. CLIMATE LAYOUT _________________________________________________
 if ('climate_trend_plot' %in% to_do) {
-    layout_panel(
-        to_plot=c('datasheet'),
-        df_meta=df_climate_meta,
-        data=list(
-            res_PAtrend$data,
-            res_TAtrend$data,
-            res_ETPAtrend$data
-        ),
-        df_trend=list(
-            res_PAtrend$a,
-            res_TAtrend$a,
-            res_ETPAtrend$a
-        ),
-        var=var_climate,
-        event=event_climate,
-        unit=unit_climate,
-        glose=glose_climate,
+    sheet_stationnarity_short(
+        meta, data,
+        dataEX, metaEX, trendEX,
         trend_period=trend_period,
         mean_period=mean_period,
-        colorForce=TRUE,
-        exXprob=exXprob,
-        linetype_per=c('longdash', 'solid'),
-        info_header='code',
-        info_height=0.5,
-        time_header=NULL,
-        foot_note=FALSE,
-        paper_size=c(21, 18),
-        figdir=figdir,
-        pdf_chunk=pdf_chunk)
+        exProb=exProb,
+        logo_path=logo_path,
+        Shapefiles=Shapefiles,
+        # paper_size=c(21, 18),
+        figdir=today_figdir,
+        df_page=NULL,
+        verbose=subverbose)
 }
