@@ -117,10 +117,10 @@ filename =
 # - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
-        'create_data',
-        'extract_data'
+        # 'create_data',
+        # 'extract_data'
         # 'trend_plot'
-        # 'climate_trend_plot'
+        'climate_trend_plot'
     )
 
 mode =
@@ -150,6 +150,10 @@ extract_data = extract_data_tmp
 verbose = TRUE
 subverbose = TRUE
 
+river_length =
+    # NULL
+    300000
+
 
 ## 4. ANALYSIS PARAMETERS ____________________________________________
 # Periods of time to perform the trend analyses. More precisely :
@@ -169,10 +173,10 @@ periodSub =
 # - 'periodCur' tends to represent the current period
 #    flow data
 periodRef =
-    NULL
+    # NULL
     c('1968-01-01', '1988-12-31')
 periodCur =
-    NULL
+    # NULL
     c('2000-01-01', '2020-12-31')
 
 
@@ -494,23 +498,29 @@ library(stringr)
 tmppath = file.path(computer_work_path, tmpdir)
 
 # Creates list of period for trend analysis
-trend_period = NULL
+period_trend = NULL
 if (!is.null(periodAll)) {
-    trend_period = append(trend_period, list(periodAll))
+    period_trend = append(period_trend, list(periodAll))
 }
 if (!is.null(periodSub)) {
-    trend_period = append(trend_period, list(periodSub))
+    period_trend = append(period_trend, list(periodSub))
+}
+if (!is.null(period_trend)) {
+    period_trend = lapply(period_trend, as.Date)
 }
 # Creates list of period for average analysis
-mean_period = NULL
+period_change = NULL
 if (!is.null(periodRef)) {
-    mean_period = append(mean_period, list(periodRef))
+    period_change = append(period_change, list(periodRef))
 }
 if (!is.null(periodCur)) {
-    mean_period = append(mean_period, list(periodCur))
+    period_change = append(period_change, list(periodCur))
+}
+if (!is.null(period_change)) {
+    period_change = lapply(period_change, as.Date)
 }
 
-input_trend_period = sapply(trend_period, paste, collapse='/')
+input_period_trend = sapply(period_trend, paste, collapse='/')
 
 
 ## 1. EXTRACTION _____________________________________________________

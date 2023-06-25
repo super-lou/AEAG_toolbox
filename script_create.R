@@ -102,10 +102,10 @@ if ('create_data' %in% to_do) {
         # Time gap
         df_meta = get_lacune(data, df_meta)
         # Hydrograph
-        if (!is.null(mean_period[[1]])) {
-            period = mean_period[[1]]
+        if (!is.null(period_change[[1]])) {
+            period = period_change[[1]]
         } else {
-            period = trend_period[[1]] 
+            period = period_trend[[1]] 
         }
         df_meta = get_hydrograph(data, df_meta,
                                  period=period)$meta

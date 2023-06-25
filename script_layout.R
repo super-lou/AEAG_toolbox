@@ -27,8 +27,8 @@
 ## 0. SHAPEFILE LOADING ______________________________________________
 # Shapefile importation in order to do it only once time
 if (!exists("Shapefiles")) {
-    post("### Loading shapefiles")
-    Code = levels(factor(data))
+    print("### Loading shapefiles")
+    Code = levels(factor(data$Code))
     Shapefiles = load_shapefile(
         computer_data_path, Code,
         france_dir, france_file,
@@ -79,8 +79,8 @@ if ('trend_plot' %in% to_do) {
                  samplePeriod=samplePeriod_analyse,
                  glose=glose_analyse,
                  structure=structure,
-                 trend_period=trend_period,
-                 mean_period=mean_period,
+                 period_trend=period_trend,
+                 period_change=period_change,
                  colorForce=TRUE,
                  exXprob=exXprob,
                  info_header=data,
@@ -119,12 +119,13 @@ if ('climate_trend_plot' %in% to_do) {
     sheet_stationnarity_short(
         meta, data,
         dataEX, metaEX, trendEX,
-        trend_period=trend_period,
-        mean_period=mean_period,
+        # period_trend=period_trend,
+        # period_change=period_change,
+        linetype_per=c('dashed', 'solid'),
         exProb=exProb,
         logo_path=logo_path,
         Shapefiles=Shapefiles,
-        # paper_size=c(21, 18),
+        paper_size=c(21, 18),
         figdir=today_figdir,
         df_page=NULL,
         verbose=subverbose)

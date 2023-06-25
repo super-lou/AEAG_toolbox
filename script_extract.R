@@ -129,7 +129,7 @@ if ('trend_analyse' %in% to_do) {
         }
 
         res = get_trend(data=data,
-                        period=trend_period,
+                        period=period_trend,
                         level=level,
                         flag=flag,
                         Process)
@@ -218,28 +218,25 @@ if ('extract_data' %in% to_do) {
 
     trendEX = dplyr::tibble()
     
-    for (period in trend_period) {
-        period = as.Date(period)
+    for (i in 1:length(dataEX)) {
+        trendEX_var = process_trend(
+            dataEX[[i]],
+            metaEX=metaEX,
+            MK_level=level,
+            take_not_signif_into_account=TRUE,
+            period_trend=period_trend,
+            period_change=period_change,
+            exProb=exProb,
+            verbose=subverbose)
 
-        for (i in 1:length(dataEX)) {
-            trendEX_tmp = process_trend(
-                dplyr::filter(dataEX[[i]],
-                              min(period) <= Date &
-                              Date <= max(period)),
-                MK_level=level,
-                verbose=subverbose)
-
-            trendEX_tmp = dplyr::bind_cols(trendEX_tmp,
-                                           var=names(dataEX)[i])
-
-            if (nrow(trendEX) == 0) {
-                trendEX = trendEX_tmp
-            } else {
-                trendEX = dplyr::bind_rows(trendEX,
-                                           trendEX_tmp)
-            }
+        if (nrow(trendEX) == 0) {
+            trendEX = trendEX_var
+        } else {
+            trendEX = dplyr::bind_rows(trendEX,
+                                       trendEX_var)
         }
     }
+    
     dataEX = purrr::reduce(dataEX, dplyr::full_join,
                            by=c("Code", "Date"))
 }
