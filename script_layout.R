@@ -119,8 +119,7 @@ if ('climate_trend_plot' %in% to_do) {
     sheet_stationnarity_short(
         meta, data,
         dataEX, metaEX, trendEX,
-        # period_trend=period_trend,
-        # period_change=period_change,
+        period_trend_show=period_trend,
         linetype_per=c('dashed', 'solid'),
         exProb=exProb,
         logo_path=logo_path,

@@ -117,6 +117,7 @@ filename =
 # - 'climate_trend_plot' : Plotting of trend analyses of climate data
 to_do =
     c(
+        # 'delete_tmp',
         # 'create_data',
         # 'extract_data'
         # 'trend_plot'
@@ -148,7 +149,7 @@ names(extract_data_tmp) = extract_data
 extract_data = extract_data_tmp
 
 verbose = TRUE
-subverbose = TRUE
+subverbose = FALSE
 
 river_length =
     # NULL
@@ -496,6 +497,10 @@ library(stringr)
 
 
 tmppath = file.path(computer_work_path, tmpdir)
+
+if ('delete_tmp' %in% to_do) {
+    unlink(tmppath, recursive=TRUE)
+}
 
 # Creates list of period for trend analysis
 period_trend = NULL
