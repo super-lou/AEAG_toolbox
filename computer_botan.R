@@ -53,20 +53,13 @@ dev_lib_path = '/home/louis/Documents/bouleau/INRAE/project/'
 
 ## 2. INPUT DIRECTORIES ______________________________________________
 ### 2.1. Data ________________________________________________________
-computer_data_path = '/home/louis/Documents/bouleau/INRAE/data'
-obs_dir = "Explore2/Explore2 HYDRO QJM critiques 2023"
-obs_format = "_HYDRO_QJM.txt"
-diag_dir = "Explore2/diagnostic"
-proj_dir = "Explore2/projection"
-proj_merge_dir = "Explore2/projection_merge"
-codes_selection_file = "Explore2/Selection_points_simulation_V20230510.txt"
-projs_selection_file = "Explore2/ensembleProjectionClimatExplore2.txt"
+computer_data_path =
+    '/home/louis/Documents/bouleau/INRAE/data/hydrologie/'
+obs_hydro_format = "_HYDRO_QJM.txt"
 
 ### 2.2. Variables ___________________________________________________
 # Name of the directory that regroups all variables information
-CARD_path = file.path(gsub("[/]project[/].*$", "",
-                           computer_work_path),
-                      "project",
+CARD_path = file.path(dev_lib_path,
                       "CARD_project",
                       "CARD")
 # Name of the tool directory that includes all the functions needed to
@@ -77,30 +70,24 @@ init_var_file = '__default__.R'
 
 ### 2.3. Resources ___________________________________________________
 resources_path = file.path(computer_work_path, 'resources')
-#### 2.3.1. Logo _____________________________________________________
 logo_dir = 'logo'
-
-#### 2.3.2. Icon _____________________________________________________
 icon_dir = 'icon'
 
-#### 2.3.3. Shapefile ________________________________________________
-shp_dir = 'map'
+### 2.4. Shapefile ________________________________________________
+computer_shp_path =
+    '/home/louis/Documents/bouleau/INRAE/data/map'
 # Path to the shapefile for france contour from 'computer_data_path' 
-france_dir = file.path(shp_dir, 'france')
-france_file = 'gadm36_FRA_0.shp'
+france_shp_path = 'france/gadm36_FRA_0.shp'
 # Path to the shapefile for basin shape from 'computer_data_path' 
-bassinHydro_dir = file.path(shp_dir, 'bassinHydro')
-bassinHydro_file = 'bassinHydro.shp'
+bassinHydro_shp_path = 'bassinHydro/bassinHydro.shp'
 # Path to the shapefile for sub-basin shape from 'computer_data_path' 
-regionHydro_dir = file.path(shp_dir, 'regionHydro')
-regionHydro_file = 'regionHydro.shp'
+regionHydro_shp_path = 'regionHydro/regionHydro.shp'
 # Path to the shapefile for station basins shape from 'computer_data_path' 
-entiteHydro_dir = file.path(shp_dir, 'entiteHydro')
-entiteHydro_file = c('BV_4207_stations.shp', '3BVs_FRANCE_L2E_2018.shp')
+entiteHydro_shp_path = c('entiteHydro/BV_4207_stations.shp', 'entiteHydro/3BVs_FRANCE_L2E_2018.shp')
 entiteHydro_coord = c('L93', 'L2')
-# Path to the shapefile for river shape from 'computer_data_path' 
-river_dir = file.path('map', 'river')
-river_file = 'CoursEau_FXX.shp'
+river_shp_path = 'river/CoursEau_FXX.shp'
+# piezo
+entitePiezo_shp_path = "entitePiezo_niveau1_extension/entitePiezo_niveau1_extension.shp"
 
 
 ## 3. OUTPUT DIRECTORIES _____________________________________________
@@ -112,10 +99,6 @@ now = format(Sys.time(), "%H_%M_%S")
 resdir = file.path(computer_work_path, 'results')
 today_resdir = file.path(computer_work_path, 'results', today)
 now_resdir = file.path(computer_work_path, 'results', today, now)
-
-# Result sub directory
-modified_data_dir = 'modified_data'
-trend_dir = 'trend_analyses'
 
 ### 3.2. Figures  ____________________________________________________
 figdir = file.path(computer_work_path, 'figures')

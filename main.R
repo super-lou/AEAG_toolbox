@@ -47,116 +47,164 @@
 # |  _/| '_|/ _ \/ _|/ -_)(_-<(_-<
 # |_|  |_|  \___/\__|\___|/__//__/ ___________________________________
 ## 1. REQUIREMENTS ___________________________________________________
-# Explore2_toolbox path
+# AEAG_toolbox path
 lib_path =
     "./"
 
-## 2. DATA DIRECTORY _________________________________________________
-# Directory of Banque HYDRO data you want to use in ash\\data\\ to
-# extract stations flow data. If '' is use, data will be search in
-# ash\\data\\.
-filedir =
-    # ''
-    'AEAG_selection'
-    # 'RRSE'
-
-# Name of the files that will be analysed from the data directory
-# (if 'all', all the file of the directory will be chosen)
-filename =
-    # ''
-    'all'
-    c(
-        # 'X0500010_HYDRO_QJM.txt'
-        # 'Q0214010_HYDRO_QJM.txt',
-        # 'H7833520_HYDRO_QJM.txt',
-        # 'O0384010_HYDRO_QJM.txt',
-        # 'O3314010_HYDRO_QJM.txt',
-        # 'S2235610_HYDRO_QJM.txt',
-        # 'O1484320_HYDRO_QJM.txt'
-        # 'O0362510_HYDRO_QJM.txt'
-        # 'A3301010_HYDRO_QJM.txt',
-        # 'A4050620_HYDRO_QJM.txt'
-        # '^[A]'
-    )
-
-## 3. WHAT YOU WANT TO DO ____________________________________________
-# This vector regroups all the different step you want to do. For
-# example if you write 'extraction', the extraction of the
-# data for the station will be done. If you add also
-# 'analyse', the extraction and then the trend analyse will be
-# done. But if you only write, for example, 'plot', without
-# having previously execute the code with 'extraction' and
-# 'analyse', it will results in a failure.
+## 2. GENERAL PROCESSES ______________________________________________
+# This to_do vector regroups all the different step you want to do.
+# For example if you write 'create_data', a tibble of hydrological
+# data will be created according to the info you provide in the ## 1.
+# CREATE_DATA section of the STEPS part below. If you also add
+# 'extract_data' in the vector, the extract will also be perfom
+# following the creation of data. But if you only write, for example,
+# 'plot_sheet', without having previously execute the code to have
+# loading data to plot, it will results in a failure.
 #
 # Options are listed below with associated results after '>' :
 #
-# - 'extraction' : Extraction of data and meta data tibbles
-#                          about stations
-#                          > 'data' 
-#                          > 'df_meta'
+# - 'delete_tmp' :
+#     Delete temporary data in the tmpdir/.
+#     > Permanently erase temporary data.
 #
-# - 'climate_extraction' : Extraction of data and metadata tibbles
-#                          about climate data
-#                          > 'data' 
-#                          > 'df_meta'
+# - 'create_data' :
+#     Creation of tibble of data that will be saved in tmpdir/. The
+#     data will be saved in fst format which is a fast reading and
+#     writting format. Each data tibble go with its meta tibble that
+#     regroup info about the data. Those files are named with a '_'
+#     followed by a capital letter that correspond to the first letter
+#     of the hydrological station codes that are stored in it. A file
+#     contain nCode4RAM stations, so each nCode4RAM stations a
+#     different file is created with a digit in its name to specify
+#     it. The selection of station code is done in the
+#     codes_to_use variable of the ## 1. CREATE_DATA section of the
+#     STEPS part below and the model used are selected in the
+#     variable models_to_diag of that same previous section.
+#     > tmpdir/data_K1.fst :
+#        A fst file that contain the tibble of created data.
+#     > tmpdir/meta_K1.fst :
+#        An other fst file that contain info about the data file.
 #
-# - 'trend_analyse' : Trend analyses of stations data
-#                             > 'df_XEx' : tibble of extracted data
-#                             > 'df_Xtrend' : tibble of trend results
+# - 'extract_data' :
+#     Perfom the requested analysis on the created data contained in
+#     the tmpdir/. Details about the analysis are given with the
+#     extract_data variable in the ## 2. EXTRACT_DATA section of the
+#     STEPS part below. This variable needs to be a path to a CARD
+#     directory. See CARD toolbox for more info
+#     https://github.com/super-lou/CARD.
+#     > tmpdir/dataEXind_K1.fst : 
+#        If the CARD directory contains 'indicator' this fst file
+#        will be created.
+#     > tmpdir/metaEXind_K1.fst :
+#        Info about variables stored in dataEXind_K1.fst.
+#     > tmpdir/dataEXserie_K1/ : 
+#        If the CARD directory contains 'serie' this directory that
+#        contains a fst file for each serie variable extracted
+#        will be created.
+#     > tmpdir/metaEXserie_K1.fst :
+#        Info about variables stored in dataEXserie_K1.
 #
-# - 'break_analyse' : Brief analysis of break data
-#                             > 'df_break' : tibble of break results
+# - 'save_extract' :
+#     Saves all the data contained in the tmpdir/ to the resdir/. The
+#     format used is specified in the saving_format variable of the 
+#     ## 3. SAVE_EXTRACT section of the STEPS part.
+#     > Moves all temporary data in tmpdir/ to the resdir/.
 #
-# - 'climate_trend_analyse' : Trend analyses of the climate data
-#                             > 'df_XEx' : tibble of extracted data
-#                             > 'df_Xtrend' : tibble of trend results
+# - 'read_tmp' :
+#     Loads in RAM all the data stored in fst files in the tmpdir/.
+#     > For example, if there is a tmpdir/metaEXind_K1.fst file, a
+#       data called metaEXind_K1 will be created in the current R
+#       process that contained the data stored in the previous files.
 #
-# - 'serie_plot' : Plotting of flow series for stations
-# - 'trend_plot' : Plotting of trend analyses of stations
-# - 'break_plot' : Plotting of the break analysis
-# - 'climate_trend_plot' : Plotting of trend analyses of climate data
+# - 'read_saving' :
+#     Loads in RAM all the data stored in the resdir/ which names are
+#     based on var2search.
+#     > Same as 'read_tmp' results but again from resdir/.
+#
+# - 'plot_sheet' :
+#     Plots a set of datasheets specify by the plot_sheet variable
+#     below. Different plotting options are mentioned in the ## 6.
+#     PLOT_SHEET section of the STEPS part.
+#     > Creates a pdf file in the figdir/ directory.
+#
+# - 'plot_doc' :
+#     Plots a pre-define set of datasheets in document format specify
+#     by the plot_doc variable below and the corresponding variables
+#     define in ## 7. PLOT_DOC.
+#     > Creates set of pdf files and a pdf document that regroup all
+#       those individual file in a specific directory of the figdir/
+#       directory.
+
+mode =
+    "hydrologie"
+    # "climat"
+
 to_do =
     c(
         # 'delete_tmp',
-        # 'create_data',
-        # 'extract_data'
+        'create_data',
+        'extract_data',
+        'save_data'
+        # 'read_tmp'
+        # 'read_saving'
+        
         # 'trend_plot'
-        'climate_trend_plot'
+        # 'climate_trend_plot'
     )
-
-mode =
-    # "hydro"
-    "climat"
-
-climat_data_dir = "climat"
 
 extract_data =
     c(
         # 'WIP'
-        'AEAG_climat'
+        # 'AEAG_climat'
+        'AEAG_hydrologie'
     )
 
-AEAG_climat = 
-    list(name='AEAG_climat',
-         variables=c("PA", "TA", "ETPA"),
-         suffix=NULL,
-         expand=FALSE,
-         cancel_lim=FALSE,
-         simplify=FALSE)
 
-extract_data_tmp = lapply(extract_data, get)
-names(extract_data_tmp) = extract_data
-extract_data = extract_data_tmp
+## 3. PLOTTING PROCESSES _____________________________________________
+### 3.1. Sheet _______________________________________________________
+# The use of this plot_sheet vector is quite similar to the to_do
+# vector. It regroups all the different datasheet you want to plot
+# individually. For example if you write 'diagnostic_station', the
+# data previously extractd saved and read will be use to plot the
+# diagnostic datasheet for specific stations.  
 
-verbose = TRUE
-subverbose = FALSE
+plot_sheet =
+    c(
+        #
+    )
 
-river_length =
-    # NULL
-    300000
+### 3.2. Document ____________________________________________________
+plot_doc =
+    c(
+        #
+    )
 
 
-## 4. ANALYSIS PARAMETERS ____________________________________________
+## 4. OTHER __________________________________________________________
+# Display information along process
+verbose =
+    # FALSE
+    TRUE
+
+
+#  ___  _                  
+# / __|| |_  ___  _ __  ___
+# \__ \|  _|/ -_)| '_ \(_-<
+# |___/ \__|\___|| .__//__/ __________________________________________
+## 1. CREATE_DATA|_| _________________________________________________ 
+data_dir_to_use =
+    # ''
+    # 'AEAG_selection'
+    'RRSE'
+    # "climat"
+
+codes_to_use =
+    c(
+        # "all"
+        'X0500010'
+        # '^A'
+    )
+
 # Periods of time to perform the trend analyses. More precisely :
 # - 'periodAll' tends to represent the maximal accessible period of
 #    flow data hence the start in 1800
@@ -164,7 +212,7 @@ river_length =
 #    flow data
 periodAll =
     # c('1968-01-01', '2020-12-31')
-    c('1900-01-01', '2020-12-31')
+    c(NA, '2020-12-31')
 periodSub =
     # NULL
     c('1968-01-01', '2020-12-31')
@@ -181,184 +229,110 @@ periodCur =
     c('2000-01-01', '2020-12-31')
 
 
-#    _       _                               _ 
-#   /_\   __| |__ __ __ _  _ _   __  ___  __| |
-#  / _ \ / _` |\ V // _` || ' \ / _|/ -_)/ _` |
-# /_/ \_\\__,_| \_/ \__,_||_||_|\__|\___|\__,_| ______________________
-## You still can modify this part without major risk but it can be ##
-## less intuitive ##                                          
-
-## 2. STATION SELECTION BY LIST ______________________________________
-### 2.1. Selection with '.docx' file _________________________________
-# Path to a '.docx' list file of station that will be analysed
-DOCXlistdir = 
-    ''
-
-DOCXlistname = 
-    ''
-    # 'Liste-station_RRSE.docx' 
-
-### 2.2. Selection with '.txt' file __________________________________
-# Path to the '.txt' list file of station that will be analysed
-# It can be generated with :
-# create_selection(computer_data_path, 'dirname', 'selection.txt')
-TXTlistdir =
-    ''
-
-TXTlistname = 
-    ''
-    # 'selection.txt'
+# # Local corrections of the data
+# flag = data.frame(
+#     Code=c('O3141010',
+#            'O7635010',
+#            'O7635010',
+#            'O7635010',
+#            'O7635010'
+#            ),
+#     Date=c('1974-07-04',
+#            '1948-09-06',
+#            '1949-02-08',
+#            '1950-07-20',
+#            '1953-07-22'
+#            ),
+#     newQ=c(9.5,
+#                4,
+#                3,
+#                1,
+#                3) # /!\ Unit
+# )
 
 
-## 3. DATA CORRECTION ________________________________________________
-# Local corrections of the data
-flag = data.frame(
-    Code=c('O3141010',
-           'O7635010',
-           'O7635010',
-           'O7635010',
-           'O7635010'
-           ),
-    Date=c('1974-07-04',
-           '1948-09-06',
-           '1949-02-08',
-           '1950-07-20',
-           '1953-07-22'
-           ),
-    newQ=c(9.5,
-               4,
-               3,
-               1,
-               3) # /!\ Unit
-)
-
+## 2. EXTRACT_DATA ___________________________________________________
 # Name of the subdirectory in 'CARD_dir' that includes variables to
-# analyse. If no subdirectory is selected, all variable files will be
+# extract. If no subdirectory is selected, all variable files will be
 # used in 'CARD_dir' (which is may be too much).
 # This subdirectory can follows some rules :
 # - Variable files can be rename to began with a number followed by an
 #   underscore '_' to create an order in variables. For example,
-#   '2_QA.R' will be analysed and plotted after '1_QMNA.R'.
+#   '2_QA.R' will be extractd and plotted after '1_QMNA.R'.
 # - Directory of variable files can also be created in order to make a
-#   group of variable of similar event. Names should be chosen between
+#   group of variable of similar topic. Names should be chosen between
 #   'Crue'/'Crue Nivale'/'Moyennes Eaux' and 'Étiage'. A directory can
 #   also be named 'Resume' in order to not include variables in an
-#   event group.
-var_to_analyse_dir =
-    # ''
-    # 'AEAG'
-    # 'MAKAHO'
-    'WIP'
+#   topic group.
 
-### 4.2. Climate variables ___________________________________________
-to_analyse_climate = c(
-    'PA',
-    'TA',
-    'ETPA'
-)
+AEAG_hydrologie = 
+    list(name='AEAG_hydrologie',
+         variables=c("QMNA", "VCN10"),
+         suffix=NULL,
+         expand=FALSE,
+         cancel_lim=FALSE,
+         simplify=FALSE)
 
+AEAG_climat = 
+    list(name='AEAG_climat',
+         variables=c("PA", "TA", "ETPA"),
+         suffix=NULL,
+         expand=FALSE,
+         cancel_lim=FALSE,
+         simplify=FALSE)
 
-## 5. STATISTICAL OPTIONS ____________________________________________
 # The risk of the Mann-Kendall trend detection test
 level = 0.1
 
-# # Mode of selection of the hydrological period. Options are : 
-# # - 'every' : Each month will be use one by one as a start of the
-# #             hydrological year
-# # - 'fixed' : Hydrological year is selected with the hydrological year
-# #             noted in the variable file in 'CARD_dir'
-# # - 'optimale' : Hydrological period is determined for each station by
-# #                following rules listed in the next variable.
-# samplePeriod_mode =
-#     # 'every'
-#     # 'fixed'
-#     'optimale'
 
-
-## 6. READING AND WRITING OF RESULTS _________________________________
-### 6.1. Reading _____________________________________________________
-# If you want to read results that have already been saved
-read_results = FALSE
-
-### 6.2. Writing data on RAM _________________________________________
-# If you want to save on RAM all the results or not. If no option is
-# selected, only the last results will be stored on RAM (because
-# results are overwrites each time in order  to save place).
-# Variable names stored will be :
-# - 'df_Xdata' : Modified flow data for every station
-# - 'df_Xmod' : Historic of modification of flow data
-# - 'df_XEx' : Extracted data
-# - 'df_Xtrend' : Trend results
-# - 'res_Xanalyse' : List of 'df_XEx' and 'df_Xtrend'
-# Otherwise, if you select 'modified_data', only 'df_Xdata' and
-# 'df_Xmod' will be save under the same name with 'X'replaced by the
-# corresponding variable name. And similarly, if 'analyse' is
-# selected, only 'df_XEx', 'df_Xtrend' and 'res_Xanalyse' are saved
-# for each variable.
-to_assign_out = c(
-    # 'modified_data',
-    # 'analyse'
-)
-
-### 6.3. Writing data on disc ________________________________________
-# It is possible to save the data under txt files.
-# Options are :
-# - 'meta' : saves 'df_meta' the data frame of meta informations
-# - 'modified_data' : saves modified 'data' data frame that take
-#   corrections into account
-# - 'analyse' : saves results of the trend analyse
-saving = c(
-    # 'meta',
-    # 'modified_data',
-    # 'analyse'
-)
-
-# If TRUE, data will be saved in 'fst' which is a fast format otherwise the default format is 'txt'
-fast_format = TRUE
-
-### 6.4. Writing figure ______________________________________________
-# How the pdf will be constructed. If you choose 'by_code', a pdf will
-# be save for each station. Otherwise, if you choose 'all', every
-# figure will be saved as one pdf.
-pdf_chunk =
-    'by_code'
-    # 'all'
-
-
-## 7. PLOTTING PARAMETERS ____________________________________________
-### 7.1. What do you want to plot ____________________________________
-# What you want to be plotted for station analyses. For example if 'datasheet' is wrote, datasheet about each stations will be drawn.
-# All the option are :
-#    'datasheet' : datasheet of trend analyses for each stations
-#        'table' : summarizing table about trend analyses
-#          'map' : map about trend analyses
-to_plot_station =
+## 3. SAVE_EXTRACT ___________________________________________________
+var2save =
     c(
-        # 'summary',
-        'datasheet'
-        # 'table'
-        # 'map'
-        # 'map_regime'
-        # 'map_trend'
-        # 'map_mean'
+        'meta',
+        'data',
+        'dataEX',
+        'metaEX',
+        'trendEX'
     )
 
-### 7.2. What do you want to show ____________________________________
-# Do you want to show small insert of color based on the studied
-# event in the upper left corner of datasheet
-show_colorEvent = TRUE
+# Saving format to use to save extract data
+saving_format =
+    "fst"
+    # c('Rdata', 'txt')
 
-# Which part of the globe do you want to show in the datasheet
-# mini map
-zone_to_show =
-    'France'
-    # 'Adour-Garonne'
 
+## 4. READ_SAVING ____________________________________________________
+read_saving =
+    # "results/my_dir"
+    today
+
+var2search =
+    c(
+        'meta[.]',
+        'data[_]',
+        'dataEX',
+        'metaEX',
+        'trendEX'
+    )
+
+
+## 5. PLOT_SHEET _____________________________________________________
 # If the hydrological network needs to be plot
 river_selection =
-    # 'none'
-    c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$', '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$', '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$', 'Le Tarn$', 'Le Rhône$', 'La Saône$')
-    # 'all'
+    NULL
+    # c('La Seine$', "'Yonne$", 'La Marne$', 'La Meuse', 'La Moselle$',
+    #   '^La Loire$', '^la Loire$', '^le cher$', '^La Creuse$',
+    #   '^la Creuse$', '^La Vienne$', '^la Vienne$', 'La Garonne$',
+    #   'Le Tarn$', 'Le Rhône$', 'La Saône$')
+
+river_length =
+    # NULL
+    300000
+    
+# Tolerance of the simplification algorithm for shapefile in sf
+toleranceRel =
+    1000 # normal map
+    # 9000 # mini map
 
 # Which logo do you want to show in the footnote
 logo_to_show =
@@ -369,32 +343,25 @@ logo_to_show =
         'AEAG'='agence-de-leau-adour-garonne_logo.png'
     )
 
+# Probability used to define the min and max quantile needed for
+# colorbar extremes. For example, if set to 0.01, quartile 1 and
+# quantile 99 will be used as the minimum and maximum values to assign
+# to minmimal maximum colors.
+exXprob = 0.01
 
-### 7.3. Other _______________________________________________________
-# Tolerance of the simplification algorithm for shapefile in sf
-toleranceRel =
-    # 1000 # normal map
-    10000 # mini map
-    
 # Graphical selection of period for a zoom
 axis_xlim =
     NULL
 # c('1982-01-01', '1983-01-01')
 
-# Probability used to define the min and max quantile needed for
-# colorbar extremes. For example, if set to 0.01, quartile 1 and
-# quantile 99 will be used as the minimum and maximum values to assign
-# to minmimal maximum colors.
-exProb = 0.01
 
 
-#  ___              ___             _   
-# |   \  ___ __ __ | _ \ __ _  _ _ | |_ 
-# | |) |/ -_)\ V / |  _// _` || '_||  _|
-# |___/ \___| \_/  |_|  \__,_||_|   \__| _____________________________
-## /!\ Do not touch if you are not aware ##
-
-## 0. INITIALISATION _________________________________________________
+#  ___        _  _    _        _  _            _    _            
+# |_ _| _ _  (_)| |_ (_) __ _ | |(_) ___ __ _ | |_ (_) ___  _ _  
+#  | | | ' \ | ||  _|| |/ _` || || |(_-</ _` ||  _|| |/ _ \| ' \ 
+# |___||_||_||_| \__||_|\__,_||_||_|/__/\__,_| \__||_|\___/|_||_| ____
+##### /!\ Do not touch if you are not aware #####
+## 0. LIBRARIES ______________________________________________________
 # Computer
 computer = Sys.info()["nodename"]
 print(paste0("Computer ", computer))
@@ -438,52 +405,52 @@ if (any(file.exists(dev_path))) {
     library(ASHE)
 }
 
-
-# Import dataSHEEP
-dev_path = file.path(dev_lib_path,
-                     c('', 'dataSHEEP_project'), 'dataSHEEP',
-                     "R")
-if (any(file.exists(dev_path))) {
-    print('Loading dataSHEEP')
-    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
-                           recursive=TRUE)
-    for (path in list_path) {
-        source(path, encoding='UTF-8')    
-    }
-}
-
-# Import SHEEPfold
-dev_path = file.path(dev_lib_path,
-                     c('', 'SHEEPfold_project'), 'SHEEPfold',
-                     "__SHEEP__")
-if (any(file.exists(dev_path))) {
-    print('Loading SHEEPfold')
-    list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
-                           recursive=TRUE)
-    for (path in list_path) {
-        source(path, encoding='UTF-8')    
-    }
-}
-
-# Import other library
 library(dplyr)
-library(ggplot2)
-library(scales)
-library(qpdf)
-library(gridExtra)
-library(gridtext)
-library(grid)
-library(ggh4x)
-library(RColorBrewer)
-library(rgdal)
-library(shadowtext)
-library(png)
-library(ggrepel)
-library(latex2exp)
-library(StatsAnalysisTrend)
-library(officer)
-library(sf)
 library(stringr)
+
+if (any(grepl("plot", to_do))) {
+    # Import dataSHEEP
+    dev_path = file.path(dev_lib_path,
+                         c('', 'dataSHEEP_project'), 'dataSHEEP',
+                         "R")
+    if (any(file.exists(dev_path))) {
+        print('Loading dataSHEEP')
+        list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
+                               recursive=TRUE)
+        for (path in list_path) {
+            source(path, encoding='UTF-8')    
+        }
+    }
+
+    # Import SHEEPfold
+    dev_path = file.path(dev_lib_path,
+                         c('', 'SHEEPfold_project'), 'SHEEPfold',
+                         "__SHEEP__")
+    if (any(file.exists(dev_path))) {
+        print('Loading SHEEPfold')
+        list_path = list.files(dev_path, pattern='*.R$', full.names=TRUE,
+                               recursive=TRUE)
+        for (path in list_path) {
+            source(path, encoding='UTF-8')    
+        }
+    }
+    
+    library(ggplot2)
+    library(scales)
+    library(qpdf)
+    library(gridExtra)
+    library(gridtext)
+    library(grid)
+    library(ggh4x)
+    library(RColorBrewer)
+    library(rgdal)
+    library(shadowtext)
+    library(png)
+    library(ggrepel)
+    library(latex2exp)
+    library(sf)
+}
+
 # already ::
 # library(rgeos)
 # library(lubridate)
@@ -528,9 +495,45 @@ if (!is.null(period_change)) {
 input_period_trend = sapply(period_trend, paste, collapse='/')
 
 
+if (all(codes_to_use == "all")) {
+    CodeALL_filename = list.files(file.path(computer_data_path,
+                                            filedir),
+                                  pattern=paste0(obs_hydro_format, "$"))
+    CodeALL = gsub(obs_hydro_format, "", CodeALL_filename, fixed=TRUE)
+} else {
+    CodeALL = convert_regexp(computer_data_path,
+                             filedir,
+                             codes_to_use,
+                             obs_hydro_format)
+    CodeALL_filename = paste0(CodeALL, obs_hydro_format)
+}
+
+
+delete_tmp = FALSE
+read_tmp = FALSE
+
+extract_data_tmp = lapply(extract_data, get)
+names(extract_data_tmp) = extract_data
+extract_data = extract_data_tmp
+
+tmppath = file.path(computer_work_path, tmpdir)
+
+if ("delete_tmp" %in% to_do) {
+    delete_tmp = TRUE
+    to_do = to_do[to_do != "delete_tmp"]
+    print("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
+}
+
+if (!(file.exists(tmppath))) {
+    dir.create(tmppath, recursive=TRUE)
+}
+
+
 ## 1. EXTRACTION _____________________________________________________
 if ('create_data' %in% to_do) {
-    print('EXTRACTION')
+    print('CREATING DATA')
     source('script_create.R', encoding='UTF-8')
 }
 
@@ -544,4 +547,24 @@ if ('extract_data' %in% to_do) {
 if ('serie_plot' %in% to_do | 'trend_plot' %in% to_do | 'break_plot' %in% to_do | 'climate_trend_plot' %in% to_do) {
     print('PLOTTING')
     source('script_layout.R', encoding='UTF-8')
+}
+
+if (any(c('save_data') %in% to_do)) {
+    print("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
+}
+
+if (any(c('read_saving') %in% to_do)) {
+    print("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
+}
+
+if ("read_tmp" %in% to_do) {
+    read_tmp = TRUE
+    to_do = to_do[to_do != "read_tmp"]
+    print("## MANAGING DATA")
+    source(file.path(lib_path, 'script_management.R'),
+           encoding='UTF-8')
 }
