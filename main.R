@@ -496,12 +496,12 @@ input_period_trend = sapply(period_trend, paste, collapse='/')
 
 if (all(codes_to_use == "all")) {
     CodeALL_filename = list.files(file.path(computer_data_path,
-                                            filedir),
+                                            data_dir_to_use),
                                   pattern=paste0(obs_hydro_format, "$"))
     CodeALL = gsub(obs_hydro_format, "", CodeALL_filename, fixed=TRUE)
 } else {
     CodeALL = convert_regexp(computer_data_path,
-                             filedir,
+                             data_dir_to_use,
                              codes_to_use,
                              obs_hydro_format)
     CodeALL_filename = paste0(CodeALL, obs_hydro_format)
