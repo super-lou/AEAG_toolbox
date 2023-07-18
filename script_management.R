@@ -127,23 +127,22 @@ if (!read_tmp & !delete_tmp) {
                                                  extract$name,
                                                  ".", format))
                 }
-                
-                if (exists("meta")) {
-                    rm ("meta")
-                    gc()
-                }
-                if (exists("metaEX")) {
-                    rm ("metaEX")
-                    gc()
-                }
-                if (exists("dataEX")) {
-                    rm ("dataEX")
-                    gc()
-                }
-                if (exists("trendEX")) {
-                    rm ("trendEX")
-                    gc()
-                }
+            }
+            if (exists("meta")) {
+                rm ("meta")
+                gc()
+            }
+            if (exists("metaEX")) {
+                rm ("metaEX")
+                gc()
+            }
+            if (exists("dataEX")) {
+                rm ("dataEX")
+                gc()
+            }
+            if (exists("trendEX")) {
+                rm ("trendEX")
+                gc()
             }
         }
     }

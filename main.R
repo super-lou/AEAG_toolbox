@@ -200,8 +200,8 @@ data_dir_to_use =
 
 codes_to_use =
     c(
-        # "all"
-        'X0500010'
+        "all"
+        # 'X0500010'
         # '^A'
     )
 
@@ -211,22 +211,22 @@ codes_to_use =
 # - 'periodSub' tends to represent the period with the most accessible
 #    flow data
 periodAll =
-    # c('1968-01-01', '2020-12-31')
-    c(NA, '2020-12-31')
-periodSub =
-    # NULL
     c('1968-01-01', '2020-12-31')
+    # c(NA, '2020-12-31')
+periodSub =
+    NULL
+    # c('1968-01-01', '2020-12-31')
 
 # Periods of time to average. More precisely :
 # - 'periodRef' tends to represent the reference period of the climate
 # - 'periodCur' tends to represent the current period
 #    flow data
 periodRef =
-    # NULL
-    c('1968-01-01', '1988-12-31')
+    NULL
+    # c('1968-01-01', '1988-12-31')
 periodCur =
-    # NULL
-    c('2000-01-01', '2020-12-31')
+    NULL
+    # c('2000-01-01', '2020-12-31')
 
 
 # # Local corrections of the data
@@ -267,9 +267,10 @@ periodCur =
 
 AEAG_hydrologie = 
     list(name='AEAG_hydrologie',
-         variables=c("QMNA", "VCN10"),
+         variables=c("QMNA", "VCN10", "VCN30", "tVCN10", "allBE"),
+         # variables=c("allBE"),
          suffix=NULL,
-         expand=FALSE,
+         expand=TRUE,
          cancel_lim=FALSE,
          simplify=FALSE)
 
@@ -297,8 +298,8 @@ var2save =
 
 # Saving format to use to save extract data
 saving_format =
-    "fst"
-    # c('Rdata', 'txt')
+    # "fst"
+    c('fst', 'csv')
 
 
 ## 4. READ_SAVING ____________________________________________________
@@ -346,7 +347,7 @@ logo_to_show =
 # colorbar extremes. For example, if set to 0.01, quartile 1 and
 # quantile 99 will be used as the minimum and maximum values to assign
 # to minmimal maximum colors.
-exXprob = 0.01
+exProb = 0.01
 
 # Graphical selection of period for a zoom
 axis_xlim =

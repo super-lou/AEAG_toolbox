@@ -96,9 +96,13 @@ if ('extract_data' %in% to_do) {
                                      extract$name,
                                      ".fst"))
 
-        trendEX$period = sapply(trendEX$period, paste0, collapse=" ")
-        trendEX$period_change = sapply(trendEX$period_change,
-                                       paste0, collapse=" ")
+        if (!is.null(period_trend)) {
+            trendEX$period = sapply(trendEX$period, paste0, collapse=" ")
+        }
+        if (!is.null(period_change)) {
+            trendEX$period_change = sapply(trendEX$period_change,
+                                           paste0, collapse=" ")
+        }
         
         write_tibble(trendEX,
                      filedir=tmppath,
