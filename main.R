@@ -142,11 +142,11 @@ mode =
 to_do =
     c(
         # 'delete_tmp',
-        'create_data',
-        'extract_data',
-        'save_data'
+        # 'create_data',
+        # 'extract_data',
+        # 'save_data'
         # 'read_tmp'
-        # 'read_saving'
+        'read_saving'
         
         # 'trend_plot'
         # 'climate_trend_plot'
@@ -156,7 +156,8 @@ extract_data =
     c(
         # 'WIP'
         # 'AEAG_climat'
-        'AEAG_hydrologie'
+        # 'AEAG_hydrologie'
+        'MAKAHO'
     )
 
 
@@ -267,12 +268,25 @@ periodCur =
 
 AEAG_hydrologie = 
     list(name='AEAG_hydrologie',
-         variables=c("QMNA", "VCN10", "VCN30", "tVCN10", "allBE"),
-         # variables=c("allBE"),
+         variables=c("QJXA", "QMNA", "VCN10",
+                     "VCN30", "tVCN10", "allBE"),
+         # variables=c("QJXA"),
          suffix=NULL,
          expand=TRUE,
          cancel_lim=FALSE,
          simplify=FALSE)
+
+
+MAKAHO = 
+    list(name='MAKAHO',
+         variables=c("QJXA", "Q05",
+                     "QA",
+                     "Q95", "QMNA", "VCN10", "tVCN10", "allBE"),
+         suffix=NULL,
+         expand=TRUE,
+         cancel_lim=FALSE,
+         simplify=FALSE)
+
 
 AEAG_climat = 
     list(name='AEAG_climat',
@@ -304,7 +318,7 @@ saving_format =
 
 ## 4. READ_SAVING ____________________________________________________
 read_saving =
-    "results/my_dir"
+    "2024_01_09"
 
 var2search =
     c(

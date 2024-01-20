@@ -42,7 +42,7 @@ if ('extract_data' %in% to_do) {
                         tmp=tmppath,
                         layout=c(extract$name, "[",
                                  extract$variables, "]"),
-                        overwrite=FALSE)
+                        overwrite=TRUE)
 
         res = CARD_extraction(data,
                               CARD_path=CARD_path,
