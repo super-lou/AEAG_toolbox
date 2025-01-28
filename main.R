@@ -141,12 +141,12 @@ mode =
 
 to_do =
     c(
-        # 'delete_tmp',
-        # 'create_data',
-        # 'extract_data',
-        # 'save_data'
+        'delete_tmp',
+        'create_data',
+        'extract_data',
+        'save_data'
         # 'read_tmp'
-        'read_saving'
+        # 'read_saving'
         
         # 'trend_plot'
         # 'climate_trend_plot'
@@ -202,6 +202,7 @@ data_dir_to_use =
 codes_to_use =
     c(
         "all"
+        # "A2332110"
         # 'X0500010'
         # '^A'
     )
@@ -279,9 +280,11 @@ AEAG_hydrologie =
 
 MAKAHO = 
     list(name='MAKAHO',
-         variables=c("QJXA", "Q05",
-                     "QA",
-                     "Q95", "QMNA", "VCN10", "tVCN10", "allBE"),
+         variables=c(
+             "Q05A", "Q10A", "QJXA", "tQJXA", "VCX10",
+             "QA", "QSA_season", "QMA_month",
+             "Q95A", "Q90A", "QMNA", "VCN10", "allLF"
+         ),
          suffix=NULL,
          expand=TRUE,
          cancel_lim=FALSE,
@@ -361,7 +364,7 @@ logo_to_show =
 # colorbar extremes. For example, if set to 0.01, quartile 1 and
 # quantile 99 will be used as the minimum and maximum values to assign
 # to minmimal maximum colors.
-exProb = 0.01
+prob_of_quantile_for_palette = 0.01
 
 # Graphical selection of period for a zoom
 axis_xlim =

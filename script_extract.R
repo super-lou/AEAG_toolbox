@@ -52,36 +52,55 @@ if ('extract_data' %in% to_do) {
                               simplify=extract$simplify,
                               suffix=extract$suffix,
                               expand_overwrite=extract$expand,
+                              # sampling_period_overwrite=
+                              #     extract$sampling_period,
                               cancel_lim=extract$cancel_lim,
-                              verbose=TRUE)
+                              rm_duplicates=TRUE,
+                              dev=FALSE,
+                              verbose=verbose)
 
         dataEX = res$dataEX
         metaEX = res$metaEX
 
-        trendEX = dplyr::tibble()
+        # trendEX = dplyr::tibble()
+        trendEX = list()
         
-        for (i in 1:length(dataEX)) {
+        for (j in 1:length(dataEX)) {
             trendEX_var = process_trend(
-                dataEX[[i]],
+                dataEX=dataEX[[j]],
                 metaEX=metaEX,
                 MK_level=level,
-                take_not_signif_into_account=TRUE,
+                time_dependency_option="AR1",
+                suffix=extract$suffix,
                 period_trend=period_trend,
                 period_change=period_change,
-                exProb=exProb,
-                verbose=TRUE)
+                extreme_take_not_signif_into_account=TRUE,
+                extreme_take_only_id=NULL,
+                extreme_by_suffix=FALSE,
+                extreme_prob=prob_of_quantile_for_palette,
+                verbose=verbose)
 
-            if (nrow(trendEX) == 0) {
-                trendEX = trendEX_var
-            } else {
-                trendEX = dplyr::bind_rows(trendEX,
-                                           trendEX_var)
+            if (!is.null(period_trend)) {
+                trendEX_var$period_trend =
+                    sapply(trendEX_var$period_trend,
+                           paste0, collapse=" ")
             }
-        }
+            if (!is.null(period_change)) {
+                trendEX_var$period_change =
+                    sapply(trendEX_var$period_change,
+                           paste0, collapse=" ")
+            }
 
-        # if (simplify)
-        # dataEX = purrr::reduce(dataEX, dplyr::full_join,
-                               # by=c("Code", "Date"))
+            
+            # if (nrow(trendEX) == 0) {
+            #     trendEX = trendEX_var
+            # } else {
+            #     trendEX = dplyr::bind_rows(trendEX,
+            #                                trendEX_var)
+            # }
+            trendEX = append(trendEX, list(trendEX_var))
+            names(trendEX)[length(trendEX)] = names(dataEX)[j]
+        }
         
         write_tibble(dataEX,
                      filedir=tmppath,
@@ -96,14 +115,6 @@ if ('extract_data' %in% to_do) {
                                      extract$name,
                                      ".fst"))
 
-        if (!is.null(period_trend)) {
-            trendEX$period = sapply(trendEX$period, paste0, collapse=" ")
-        }
-        if (!is.null(period_change)) {
-            trendEX$period_change = sapply(trendEX$period_change,
-                                           paste0, collapse=" ")
-        }
-        
         write_tibble(trendEX,
                      filedir=tmppath,
                      filename=paste0("trendEX_",

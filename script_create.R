@@ -35,6 +35,7 @@ if ('create_data' %in% to_do) {
         data = create_data_HYDRO(computer_data_path,
                                  data_dir_to_use,
                                  CodeALL_filename,
+                                 variable_to_load="Qm3s", 
                                  verbose=TRUE)
         
     } else if (mode == "climat") {
